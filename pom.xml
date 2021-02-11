@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>io.vertigo</groupId>
+		<artifactId>vertigo-parent</artifactId>
+		<version>3.0.0</version>
+	</parent>
+
+	<artifactId>vertigo-mariner</artifactId>
+	<packaging>jar</packaging>
+	<name>vertigo-mariner</name>
+
+	<dependencies>
+		<dependency>
+			<groupId>io.vertigo</groupId>
+			<artifactId>vertigo-commons</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	<!-- 	<dependency>
+			<groupId>io.vertigo</groupId>
+			<artifactId>vertigo-database</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+ -->
+ 		<dependency>
+			<groupId>io.vertigo</groupId>
+			<artifactId>vertigo-datamodel</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+ 		<dependency>
+			<groupId>io.vertigo</groupId>
+			<artifactId>vertigo-vega</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!-- tests -->
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<version>1.4.200</version>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- libs -->
+		<!-- kvdatastore -->
+		<dependency>
+			<groupId>com.sleepycat</groupId>
+			<artifactId>je</artifactId>
+			<version>18.3.12</version>
+		</dependency>
+
+<!-- For javalin embedded -->
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-server</artifactId>
+            <version>9.4.31.v20200723</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty.websocket</groupId>
+            <artifactId>websocket-server</artifactId>
+            <version>9.4.31.v20200723</version>
+        </dependency>
+        
+
+<!-- 		
+		<dependency>
+			<groupId>com.mchange</groupId>
+			<artifactId>c3p0</artifactId>
+			<version>0.9.5.4</version>
+			<optional>true</optional>C3p0DataSourceProviderPlugin
+		</dependency>
+
+		redis
+		<dependency>
+			<groupId>io.vertigo</groupId>
+			<artifactId>vertigo-redis-connector</artifactId>
+			<version>${vertigo.version}</version>
+			<optional>true</optional> pour RedisCache
+		</dependency>
+ -->		
+		<!--cache -->
+		<dependency>
+			<groupId>org.ehcache</groupId>
+			<artifactId>ehcache</artifactId>
+			<version>3.8.1</version> 
+			<optional>true</optional> <!-- pour EhCachePlugin -->
+		</dependency>
+
+		<dependency>
+			<groupId>io.vertigo</groupId>
+			<artifactId>vertigo-studio</artifactId>
+			<version>${vertigo.version}</version>
+		</dependency>
+		
+	</dependencies>
+</project>

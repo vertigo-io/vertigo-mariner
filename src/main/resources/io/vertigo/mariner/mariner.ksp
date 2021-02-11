@@ -1,0 +1,7 @@
+package io.vertigo.mariner.equipment
+
+create DtDefinition Equipment  {
+	/*stereotype: "KeyConcept"*/
+	id baseId 	{domain: StyId 		label: "Id"}
+	field code 	{domain: StyCode 	label: "Code" cardinality:"1" }
+}
