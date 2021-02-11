@@ -4,10 +4,10 @@ import java.util.List;
 
 import io.vertigo.core.lang.Assertion;
 
-public final class BTSelector implements BTNode {
+final class BTSelector implements BTNode {
 	private final List<BTNode> nodes;
 
-	public BTSelector(final BTNode... nodes) {
+	BTSelector(final BTNode... nodes) {
 		Assertion.check()
 				.isNotNull(nodes);
 		//---
