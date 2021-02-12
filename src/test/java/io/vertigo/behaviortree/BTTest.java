@@ -29,6 +29,7 @@ public class BTTest {
 	private static BTRoot createBTRoot(final State state) {
 		final BTNode ticketGoal = BTNode.sequence(
 				state.fulfill("name", "Quel est votre nom ?"),
+				state.fulfill("return", "Voulez vous un retour ? O/N", "O", "N"),
 				state.fulfill("from", "Quelle est votre ville de départ ?"),
 				state.fulfill("to", "Quelle est votre ville d'arrivée ?"));
 		return new BTRoot(ticketGoal);
