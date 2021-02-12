@@ -11,7 +11,11 @@ public class BTTest {
 	@Test
 	public void test() {
 		final State state = new State();
-		System.out.println("before state >>" + state.toString());
+		System.out.println("-----------------");
+		System.out.println("--before state---");
+		System.out.print("-----------------");
+		System.out.println(state.toString());
+		System.out.println("-----------------");
 		//state.values.put("name", "john");
 
 		final BTRoot root = createBTRoot(state);
@@ -19,9 +23,9 @@ public class BTTest {
 		while (status == BTStatus.Running) {
 			status = root.eval();
 		}
-
-		System.out.println("---after state---");
 		System.out.println("-----------------");
+		System.out.println("--after state----");
+		System.out.print("-----------------");
 		System.out.println(state.toString());
 		System.out.println("-----------------");
 	}

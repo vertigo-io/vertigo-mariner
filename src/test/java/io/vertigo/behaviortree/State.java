@@ -53,10 +53,12 @@ public final class State {
 	public String toString() {
 		final var builder = new StringBuilder();
 		for (final String key : values.keySet()) {
-			builder.append(key)
+			builder
+					.append("\r\n")
+					.append("---")
+					.append(key)
 					.append(" : ")
-					.append(values.get(key))
-					.append("\r\n");
+					.append(values.get(key));
 		}
 		return builder.toString();
 	}
