@@ -3,9 +3,11 @@ package io.vertigo.behaviortree;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.function.Predicate;
 
 import BehaviorTree.BTNode;
 import BehaviorTree.BTStatus;
+import io.vertigo.core.util.StringUtil;
 
 public final class State {
 	private final Scanner sc = new Scanner(System.in);
@@ -15,21 +17,25 @@ public final class State {
 		return () -> values.get(key) == null ? BTStatus.Failed : BTStatus.Succeeded;
 	}
 
-	private BTNode query(final String key, final String answer) {
+	private BTNode query(final String key, final String answer, final Predicate<String> validator) {
 		return () -> {
 			System.out.println(answer);
 			//---
 			final String input = sc.nextLine();
-			values.put(key, input);
-			//---
-			return BTStatus.Running;
+			if (validator.test(input)) {
+				values.put(key, input);
+				return BTStatus.Running;
+			}
+			System.err.println("error on parsing " + answer);
+			return BTStatus.Failed;
 		};
 	}
 
 	public BTNode fulfill(final String key, final String answer) {
+		final Predicate<String> validator = t -> !StringUtil.isBlank(t);
 		return BTNode.selector(
 				isFulFilled(key),
-				query(key, answer));
+				query(key, answer, validator));
 	}
 
 	@Override
