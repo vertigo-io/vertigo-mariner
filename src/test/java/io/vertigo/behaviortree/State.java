@@ -3,6 +3,7 @@ package io.vertigo.behaviortree;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Scanner;
 import java.util.function.Predicate;
 
@@ -32,9 +33,9 @@ public final class State {
 		};
 	}
 
-	//	public BTNode equals(final String key, final String result) {
-	//		return BTNode.condition(() -> Objects.equals(values.get(key), result));
-	//	}
+	public BTNode equals(final String key, final String result) {
+		return BTNode.condition(() -> Objects.equals(values.get(key), result));
+	}
 
 	public BTNode fulfill(final String key, final String answer) {
 		final Predicate<String> validator = t -> !StringUtil.isBlank(t);
