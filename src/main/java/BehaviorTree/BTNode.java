@@ -1,5 +1,7 @@
 package BehaviorTree;
 
+import java.util.function.Supplier;
+
 @FunctionalInterface
 public interface BTNode {
 	//	String getKey();
@@ -12,5 +14,13 @@ public interface BTNode {
 
 	static BTNode selector(final BTNode... nodes) {
 		return new BTSelector(nodes);
+	}
+
+	static BTNode condition(final Supplier<Boolean> test) {
+		return () -> test.get() ? BTStatus.Succeeded : BTStatus.Failed;
+	}
+
+	static BTNode sucess() {
+		return () -> BTStatus.Succeeded;
 	}
 }

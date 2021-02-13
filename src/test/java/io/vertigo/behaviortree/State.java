@@ -1,6 +1,6 @@
 package io.vertigo.behaviortree;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -12,10 +12,10 @@ import io.vertigo.core.util.StringUtil;
 
 public final class State {
 	private final Scanner sc = new Scanner(System.in);
-	public final Map<String, String> values = new HashMap();
+	public final Map<String, String> values = new LinkedHashMap();
 
 	private BTNode isFulFilled(final String key) {
-		return () -> values.get(key) == null ? BTStatus.Failed : BTStatus.Succeeded;
+		return BTNode.condition(() -> values.get(key) != null);
 	}
 
 	private BTNode query(final String key, final String answer, final Predicate<String> validator) {
@@ -31,6 +31,10 @@ public final class State {
 			return BTStatus.Failed;
 		};
 	}
+
+	//	public BTNode equals(final String key, final String result) {
+	//		return BTNode.condition(() -> Objects.equals(values.get(key), result));
+	//	}
 
 	public BTNode fulfill(final String key, final String answer) {
 		final Predicate<String> validator = t -> !StringUtil.isBlank(t);
@@ -48,6 +52,11 @@ public final class State {
 				isFulFilled(key),
 				query(key, answer, validator));
 	}
+
+	//	public BTNode clear(final String key) {
+	//		values.remove(key);
+	//		return BTNode.sucess();
+	//	}
 
 	@Override
 	public String toString() {
