@@ -35,7 +35,7 @@ public class BTTest {
 
 	private static BTNode goal(final State state) {
 		return BTNode.sequence(
-				state.fulfill(INTENTION, "[W]eather, [T]icket or e[X]it ?", "W", "T", "X"),
+				state.fulfill(INTENTION, "Select [W]eather, [T]icket or e[X]it ?", "W", "T", "X"),
 				BTNode.selector(
 						state.equals(INTENTION, "X"),
 						BTNode.sequence(
@@ -56,11 +56,20 @@ public class BTTest {
 	}
 
 	private static BTNode weather(final State state) {
-		return state.fulfill("home", "La meteo de quelle ville ?");
+		return state.fulfill("home", "Please choose a city");
 	}
 
 	private static BTNode rate(final State state) {
-		return state.fulfill("rate", "Please rate the response [0, 1, 2, 3, 4, 5]", "0", "1", "2", "3", "4", "5");
+		return BTNode.sequence(
+				state.fulfill("rate", "Please rate the response [0, 1, 2, 3, 4, 5]", "0", "1", "2", "3", "4", "5"),
+				display("You have rated " + state.get("rate")));
+	}
+
+	private static BTNode display(final String msg) {
+		return () -> {
+			System.out.println(msg);
+			return BTStatus.Succeeded;
+		};
 	}
 
 	private static BTNode ticket(final State state) {
@@ -74,9 +83,11 @@ public class BTTest {
 		 * Certaines des données peuvent déjà être renseignée		 * 
 		 */
 		return BTNode.sequence(
-				state.fulfill("name", "Quel est votre nom ?"),
-				state.fulfill("return", "Voulez vous un retour ? O/N", "O", "N"),
-				state.fulfill("home", "Quelle est votre ville de départ ?"),
-				state.fulfill("to", "Quelle est votre ville d'arrivée ?"));
+				display("You have chosen to book a ticket, I have some questions..."),
+				state.fulfill("name", "What is your name ?"),
+				state.fulfill("return", "Do you want a return ticket  ? Y/N", "Y", "N"),
+				state.fulfill("from", "from ?"),
+				state.fulfill("to", "to ?"),
+				display("Thank you, your ticket will be sent ..."));
 	}
 }

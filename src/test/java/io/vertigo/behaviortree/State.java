@@ -33,6 +33,10 @@ public final class State {
 		};
 	}
 
+	public String get(final String key) {
+		return values.get(key);
+	}
+
 	public BTNode equals(final String key, final String result) {
 		return BTNode.condition(() -> Objects.equals(values.get(key), result));
 	}
