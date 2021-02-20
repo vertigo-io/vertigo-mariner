@@ -54,10 +54,19 @@ public final class State {
 				query(key, answer, validator));
 	}
 
-	//	public BTNode clear(final String key) {
-	//		values.remove(key);
-	//		return BTNode.sucess();
-	//	}
+	public BTNode clear(final String key) {
+		return () -> {
+			values.remove(key);
+			return BTStatus.Succeeded;
+		};
+	}
+
+	public BTNode clearAll() {
+		return () -> {
+			values.clear();
+			return BTStatus.Succeeded;
+		};
+	}
 
 	@Override
 	public String toString() {

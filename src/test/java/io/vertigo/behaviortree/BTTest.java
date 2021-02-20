@@ -23,6 +23,7 @@ public class BTTest {
 		while (status == BTStatus.Running) {
 			status = root.eval();
 		}
+		System.out.println("finished");
 		System.out.println("-----------------");
 		System.out.println("--after state----");
 		System.out.print("-----------------");
@@ -30,16 +31,27 @@ public class BTTest {
 		System.out.println("-----------------");
 	}
 
+	private static final String INTENTION = "intention";
+
 	private static BTNode goal(final State state) {
 		return BTNode.sequence(
-				state.fulfill("intention", "Voulez vous la meteo ou un ticket ? M ou T", "M", "T"),
+				state.fulfill(INTENTION, "[W]eather, [T]icket or e[X]it ?", "W", "T", "X"),
 				BTNode.selector(
+						state.equals(INTENTION, "X"),
 						BTNode.sequence(
-								state.equals("intention", "M"),
-								weather(state)),
-						BTNode.sequence(
-								state.equals("intention", "T"),
-								ticket(state))));
+								dispatch(state),
+								state.clearAll(),
+								BTNode.running())));
+	}
+
+	private static BTNode dispatch(final State state) {
+		return BTNode.selector(
+				BTNode.sequence(
+						state.equals(INTENTION, "W"),
+						weather(state)),
+				BTNode.sequence(
+						state.equals(INTENTION, "T"),
+						ticket(state)));
 	}
 
 	private static BTNode weather(final State state) {

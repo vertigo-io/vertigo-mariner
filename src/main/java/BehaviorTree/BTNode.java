@@ -23,4 +23,8 @@ public interface BTNode {
 	static BTNode sucess() {
 		return () -> BTStatus.Succeeded;
 	}
+
+	static BTNode running() {
+		return () -> BTStatus.Running;
+	}
 }
