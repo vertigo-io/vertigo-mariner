@@ -41,6 +41,7 @@ public class BTTest {
 						BTNode.sequence(
 								dispatch(state),
 								state.clearAll(),
+								rate(state),
 								BTNode.running())));
 	}
 
@@ -56,6 +57,10 @@ public class BTTest {
 
 	private static BTNode weather(final State state) {
 		return state.fulfill("home", "La meteo de quelle ville ?");
+	}
+
+	private static BTNode rate(final State state) {
+		return state.fulfill("rate", "Please rate the response [0, 1, 2, 3, 4, 5]", "0", "1", "2", "3", "4", "5");
 	}
 
 	private static BTNode ticket(final State state) {
