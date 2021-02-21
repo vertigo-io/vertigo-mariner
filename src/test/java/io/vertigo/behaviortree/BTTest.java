@@ -20,7 +20,7 @@ public class BTTest {
 
 		final BTRoot root = new BTRoot(goal(state));
 		var status = root.eval();
-		while (status == BTStatus.Running) {
+		while (status != BTStatus.Succeeded) {
 			status = root.eval();
 		}
 		System.out.println("finished");
