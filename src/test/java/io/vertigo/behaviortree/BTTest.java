@@ -6,31 +6,27 @@ import org.junit.jupiter.api.Test;
 
 import BehaviorTree.BTNode;
 import BehaviorTree.BTRoot;
-import BehaviorTree.BTStatus;
 
 public class BTTest {
 
 	@Test
 	public void test() {
 		final State state = new State();
-		System.out.println("-----------------");
-		System.out.println("--before state---");
-		System.out.print("-----------------");
-		System.out.println(state.toString());
-		System.out.println("-----------------");
+		//		System.out.println("-----------------");
+		//		System.out.println("--before state---");
+		//		System.out.print("-----------------");
+		//		System.out.println(state.toString());
+		//		System.out.println("-----------------");
+
 		//state.values.put("name", "john");
 
-		final BTRoot root = new BTRoot(goal(state));
-		var status = root.eval();
-		while (status != BTStatus.Succeeded) {
-			status = root.eval();
-		}
-		System.out.println("finished");
-		System.out.println("-----------------");
-		System.out.println("--after state----");
-		System.out.print("-----------------");
-		System.out.println(state.toString());
-		System.out.println("-----------------");
+		new BTRoot(goal(state)).run();
+		//		System.out.println("finished");
+		//		System.out.println("-----------------");
+		//		System.out.println("--after state----");
+		//		System.out.print("-----------------");
+		//		System.out.println(state.toString());
+		//		System.out.println("-----------------");
 	}
 
 	private static final String INTENTION = "intention";
@@ -67,7 +63,6 @@ public class BTTest {
 
 	private static BTNode rate(final State state) {
 		return BTNode.sequence(
-				//state.clear("rate/*"),
 				state.fulfill("rate/rating", "Please rate the response [0, 1, 2, 3, 4, 5]", "0", "1", "2", "3", "4", "5"),
 				state.display("rate/display", "You have rated {{rate/rating}}"));
 	}
@@ -94,7 +89,6 @@ public class BTTest {
 		 * Certaines des données peuvent déjà être renseignée		 * 
 		 */
 		return BTNode.sequence(
-				//				state.clear("t/*"),
 				state.display("t/begin", "You have chosen to book a ticket, I have some questions..."),
 				state.fulfill("t/name", "What is your name ?"),
 				state.fulfill("t/return", "Do you want a return ticket  ? Y/N", "Y", "N"),
