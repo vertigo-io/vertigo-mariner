@@ -1,5 +1,7 @@
 package io.vertigo.behaviortree;
 
+import java.util.function.Predicate;
+
 import org.junit.jupiter.api.Test;
 
 import BehaviorTree.BTNode;
@@ -40,8 +42,8 @@ public class BTTest {
 						state.equals(INTENTION, "X"),
 						BTNode.sequence(
 								dispatch(state),
-								state.clearAll(),
 								rate(state),
+								state.clearAll(),
 								BTNode.running())));
 	}
 
@@ -49,26 +51,35 @@ public class BTTest {
 		return BTNode.selector(
 				BTNode.sequence(
 						state.equals(INTENTION, "W"),
+						//						state.clear("w/*"),
 						weather(state)),
 				BTNode.sequence(
 						state.equals(INTENTION, "T"),
+						//state.clear("t/*"),
 						ticket(state)));
 	}
 
 	private static BTNode weather(final State state) {
-		return state.fulfill("home", "Please choose a city");
+		return BTNode.sequence(
+				state.fulfill("w/city", "Please choose a city"),
+				state.display("w/display", "It's sunny in {{city}}"));
 	}
 
 	private static BTNode rate(final State state) {
 		return BTNode.sequence(
-				state.fulfill("rate", "Please rate the response [0, 1, 2, 3, 4, 5]", "0", "1", "2", "3", "4", "5"),
-				display("You have rated " + state.get("rate")));
+				//state.clear("rate/*"),
+				state.fulfill("rate/rating", "Please rate the response [0, 1, 2, 3, 4, 5]", "0", "1", "2", "3", "4", "5"),
+				state.display("rate/display", "You have rated {{rate/rating}}"));
 	}
 
-	private static BTNode display(final String msg) {
-		return () -> {
-			System.out.println(msg);
-			return BTStatus.Succeeded;
+	public static Predicate<String> isInteger() {
+		return s -> {
+			try {
+				Integer.parseInt(s);
+				return true;
+			} catch (final Exception e) {
+				return false;
+			}
 		};
 	}
 
@@ -83,11 +94,13 @@ public class BTTest {
 		 * Certaines des données peuvent déjà être renseignée		 * 
 		 */
 		return BTNode.sequence(
-				display("You have chosen to book a ticket, I have some questions..."),
-				state.fulfill("name", "What is your name ?"),
-				state.fulfill("return", "Do you want a return ticket  ? Y/N", "Y", "N"),
-				state.fulfill("from", "from ?"),
-				state.fulfill("to", "to ?"),
-				display("Thank you, your ticket will be sent ..."));
+				//				state.clear("t/*"),
+				state.display("t/begin", "You have chosen to book a ticket, I have some questions..."),
+				state.fulfill("t/name", "What is your name ?"),
+				state.fulfill("t/return", "Do you want a return ticket  ? Y/N", "Y", "N"),
+				state.fulfill("t/from", "from ?"),
+				state.fulfill("t/to", "to ?"),
+				state.fulfill("t/count", "How many", BTTest.isInteger()),
+				state.display("t/end", "Thank you, your ticket will be sent ..."));
 	}
 }

@@ -33,10 +33,6 @@ public final class State {
 		};
 	}
 
-	public String get(final String key) {
-		return values.get(key);
-	}
-
 	public BTNode equals(final String key, final String result) {
 		return BTNode.condition(() -> Objects.equals(values.get(key), result));
 	}
@@ -58,18 +54,33 @@ public final class State {
 				query(key, answer, validator));
 	}
 
-	public BTNode clear(final String key) {
-		return () -> {
-			values.remove(key);
-			return BTStatus.Succeeded;
-		};
-	}
-
+	/*	public BTNode clear(final String key) {
+			return () -> {
+				if (key.endsWith("*")) {
+					final var prefix = key.substring(0, key.length() - 2);
+					values.keySet().removeIf(s -> s.startsWith(prefix));
+				} else {
+					values.remove(key);
+				}
+				return BTStatus.Succeeded;
+			};
+		}
+	*/
 	public BTNode clearAll() {
 		return () -> {
 			values.clear();
 			return BTStatus.Succeeded;
 		};
+	}
+
+	public BTNode display(final String key, final String msg) {
+		return BTNode.selector(
+				equals(key, "ok"),
+				() -> {
+					System.out.println(msg);
+					values.put(key, "ok");
+					return BTStatus.Succeeded;
+				});
 	}
 
 	@Override
