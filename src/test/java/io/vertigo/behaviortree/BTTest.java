@@ -62,7 +62,7 @@ public class BTTest {
 	private static BTNode weather(final State state) {
 		return BTNode.sequence(
 				state.fulfill("w/city", "Please choose a city"),
-				state.display("w/display", "It's sunny in {{city}}"));
+				state.display("w/display", "It's sunny in {{w/city}}"));
 	}
 
 	private static BTNode rate(final State state) {
@@ -100,7 +100,7 @@ public class BTTest {
 				state.fulfill("t/return", "Do you want a return ticket  ? Y/N", "Y", "N"),
 				state.fulfill("t/from", "from ?"),
 				state.fulfill("t/to", "to ?"),
-				state.fulfill("t/count", "How many", BTTest.isInteger()),
+				state.fulfill("t/count", "How many tickets ?", BTTest.isInteger()),
 				state.display("t/end", "Thank you, your ticket will be sent ..."));
 	}
 }
