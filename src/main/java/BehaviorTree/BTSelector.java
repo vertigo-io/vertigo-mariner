@@ -22,8 +22,8 @@ final class BTSelector implements BTNode {
 			//System.out.println(".....after  eval node " + node + " >>" + status);
 			if (status == BTStatus.Succeeded)
 				return BTStatus.Succeeded;
-			if (status == BTStatus.Running)
-				return BTStatus.Running;
+			//			if (status == BTStatus.Running)
+			//				return BTStatus.Running;
 		}
 		return BTStatus.Failed;
 	}

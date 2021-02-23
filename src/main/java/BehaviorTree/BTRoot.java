@@ -14,7 +14,7 @@ public final class BTRoot {
 
 	public void run() {
 		var status = rootNode.eval();
-		while (status != BTStatus.Succeeded) {
+		while (status == BTStatus.Succeeded) {
 			status = rootNode.eval();
 		}
 	}

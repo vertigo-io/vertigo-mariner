@@ -16,6 +16,10 @@ public interface BTNode {
 		return new BTSelector(nodes);
 	}
 
+	static BTNode loopUntil(final BTNode untilCondition, final BTNode node) {
+		return new BTLoop(sucess(), node, untilCondition);
+	}
+
 	static BTNode condition(final Supplier<Boolean> test) {
 		return () -> test.get() ? BTStatus.Succeeded : BTStatus.Failed;
 	}
@@ -24,7 +28,7 @@ public interface BTNode {
 		return () -> BTStatus.Succeeded;
 	}
 
-	static BTNode running() {
-		return () -> BTStatus.Running;
+	static BTNode failed() {
+		return () -> BTStatus.Failed;
 	}
 }

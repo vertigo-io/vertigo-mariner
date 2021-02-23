@@ -21,16 +21,49 @@ public final class State {
 
 	private BTNode query(final String key, final String answer, final Predicate<String> validator) {
 		return () -> {
-			System.out.println(answer);
+			System.out.println(Utils.format(answer, values));
 			//---
 			final String input = sc.nextLine();
 			if (validator.test(input)) {
 				values.put(key, input);
-				return BTStatus.Running;
+				return BTStatus.Succeeded;
 			}
 			System.err.println("error parsing : result " + answer);
 			return BTStatus.Failed;
 		};
+	}
+
+	public BTNode inc(final String key) {
+		return () -> {
+			final var s = values.getOrDefault(key, "0");
+			final int value = Integer.valueOf(s).intValue() + 1;
+			values.put(key, "" + value);
+			return BTStatus.Succeeded;
+		};
+	}
+
+	public BTNode init(final String key, final int value) {
+		return () -> {
+			if (values.get(key) == null) {
+				values.put(key, "" + value);
+			}
+			return BTStatus.Succeeded;
+		};
+	}
+
+	//	public BTNode set(final String key, final int value) {
+	//		return () -> {
+	//			values.put(key, "" + value);
+	//			return BTStatus.Succeeded;
+	//		};
+	//	}
+
+	public BTNode notEquals2(final String key, final String result) {
+		return BTNode.condition(() -> !Objects.equals(values.get(key), values.get(result)));
+	}
+
+	public BTNode equals2(final String key, final String result) {
+		return BTNode.condition(() -> Objects.equals(values.get(key), values.get(result)));
 	}
 
 	public BTNode equals(final String key, final String result) {
@@ -54,18 +87,18 @@ public final class State {
 				query(key, answer, validator));
 	}
 
-	/*	public BTNode clear(final String key) {
-			return () -> {
-				if (key.endsWith("*")) {
-					final var prefix = key.substring(0, key.length() - 2);
-					values.keySet().removeIf(s -> s.startsWith(prefix));
-				} else {
-					values.remove(key);
-				}
-				return BTStatus.Succeeded;
-			};
-		}
-	*/
+	public BTNode clear(final String key) {
+		return () -> {
+			if (key.endsWith("*")) {
+				final var prefix = key.substring(0, key.length() - 2);
+				values.keySet().removeIf(s -> s.startsWith(prefix));
+			} else {
+				values.remove(key);
+			}
+			return BTStatus.Succeeded;
+		};
+	}
+
 	public BTNode clearAll() {
 		return () -> {
 			values.clear();
@@ -77,7 +110,7 @@ public final class State {
 		return BTNode.selector(
 				equals(key, "ok"),
 				() -> {
-					System.out.println(msg);
+					System.out.println(Utils.format(msg, values));
 					values.put(key, "ok");
 					return BTStatus.Succeeded;
 				});

@@ -22,8 +22,8 @@ final class BTSequence implements BTNode {
 			//System.out.println(".....after  eval node " + node + " >>" + status);
 			if (status == BTStatus.Failed)
 				return BTStatus.Failed;
-			if (status == BTStatus.Running)
-				return BTStatus.Running;
+			//			if (status == BTStatus.Running)
+			//				return BTStatus.Running;
 		}
 		return BTStatus.Succeeded;
 	}
