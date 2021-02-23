@@ -59,7 +59,7 @@ public class BTTest {
 				state.fulfill("t/to", "to ?"),
 				state.fulfill("t/count", "How many tickets ?",
 						Utils.isInteger().and(s -> Integer.valueOf(s) > 0 && Integer.valueOf(s) < 10)),
-				loopUntil(state.equals2("t/idx", "t/count"),
+				loopUntil(state.equals("t/idx", "{{t/count}}"),
 						sequence(
 								state.inc("t/idx"),
 								state.fulfill("t/name/{{t/idx}}", "What is the name of the {{t/idx}} person ?"),

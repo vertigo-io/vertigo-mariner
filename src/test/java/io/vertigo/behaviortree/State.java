@@ -13,7 +13,7 @@ import io.vertigo.core.util.StringUtil;
 
 public final class State {
 	private final Scanner sc = new Scanner(System.in);
-	public final Map<String, String> values = new LinkedHashMap();
+	public final Map<String, String> values = new LinkedHashMap<>();
 
 	private String get(final String key) {
 		return values.get(Utils.format(key, values));
@@ -68,16 +68,8 @@ public final class State {
 	//		};
 	//	}
 
-	public BTNode notEquals2(final String key, final String result) {
-		return BTNode.condition(() -> !Objects.equals(get(key), get(result)));
-	}
-
-	public BTNode equals2(final String key, final String result) {
-		return BTNode.condition(() -> Objects.equals(get(key), get(result)));
-	}
-
 	public BTNode equals(final String key, final String result) {
-		return BTNode.condition(() -> Objects.equals(get(key), result));
+		return BTNode.condition(() -> Objects.equals(get(key), Utils.format(result, values)));
 	}
 
 	public BTNode fulfill(final String key, final String answer) {
@@ -117,13 +109,10 @@ public final class State {
 	}
 
 	public BTNode display(final String msg) {
-		return BTNode.selector(
-				//				equals(key, "ok"),
-				() -> {
-					System.out.println(Utils.format(msg, values));
-					//put(key, "ok");
-					return BTStatus.Succeeded;
-				});
+		return () -> {
+			System.out.println(Utils.format(msg, values));
+			return BTStatus.Succeeded;
+		};
 	}
 
 	@Override
