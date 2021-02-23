@@ -2,9 +2,18 @@ package BehaviorTree;
 
 import java.util.function.Supplier;
 
+import io.vertigo.core.lang.Assertion;
+
 @FunctionalInterface
 public interface BTNode {
 	BTStatus eval();
+
+	default BTNode guardedBy(final BTCondition condition) {
+		Assertion.check()
+				.isNotNull(condition);
+		//---
+		return sequence(condition, this);
+	}
 
 	static BTNode sequence(final BTNode... nodes) {
 		return new BTSequence(nodes);

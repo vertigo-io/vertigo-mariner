@@ -35,14 +35,10 @@ public class BTTest {
 
 	private static BTNode dispatch(final State state) {
 		return selector(
-				sequence(
-						state.equals(INTENTION, "W"),
-						//						state.clear("w/*"),
-						weather(state)),
-				sequence(
-						state.equals(INTENTION, "T"),
-						//state.clear("t/*"),
-						ticket(state)));
+				weather(state)
+						.guardedBy(state.equals(INTENTION, "W")),
+				ticket(state)
+						.guardedBy(state.equals(INTENTION, "T")));
 	}
 
 	private static BTNode weather(final State state) {
