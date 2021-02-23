@@ -17,13 +17,11 @@ final class BTSequence implements BTNode {
 	@Override
 	public BTStatus eval() {
 		for (final BTNode node : nodes) {
-			//System.out.println(".....before eval node " + node);
 			final var status = node.eval();
-			//System.out.println(".....after  eval node " + node + " >>" + status);
-			if (status == BTStatus.Failed)
-				return BTStatus.Failed;
-			//			if (status == BTStatus.Running)
-			//				return BTStatus.Running;
+			//continue when succeeded until a fail or a stop
+			if (!status.isSucceeded()) {
+				return status;
+			}
 		}
 		return BTStatus.Succeeded;
 	}

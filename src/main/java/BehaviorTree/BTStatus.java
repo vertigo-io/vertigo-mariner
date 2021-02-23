@@ -2,6 +2,14 @@ package BehaviorTree;
 
 public enum BTStatus {
 	Succeeded,
-	//Running,
-	Failed,
+	Stopped,
+	Failed;
+
+	public boolean isFailed() {
+		return this == Failed;
+	}
+
+	public boolean isSucceeded() {
+		return this == Succeeded;
+	}
 }

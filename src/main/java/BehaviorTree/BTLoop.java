@@ -23,17 +23,19 @@ final class BTLoop implements BTNode {
 	public BTStatus eval() {
 		for (int i = 0; i < MAX; i++) {
 			final var whileTest = whileCondition.eval();
-			if (whileTest == BTStatus.Failed)
+			//breaks the loop when the while condition failed
+			if (whileTest.isFailed())
 				return BTStatus.Succeeded;
 
 			final var status = node.eval();
-			//			if (status == BTStatus.Running)
-			//				return BTStatus.Running;
-			if (status == BTStatus.Failed)
-				return BTStatus.Failed;
+			//loop when succeeded until a fail or a stop
+			if (!status.isSucceeded()) {
+				return status;
+			}
 
 			final var untilTest = untilCondition.eval();
-			if (untilTest == BTStatus.Succeeded)
+			//breaks the loop when the until condition succeeded
+			if (untilTest.isSucceeded())
 				return BTStatus.Succeeded;
 		}
 		return BTStatus.Failed;
