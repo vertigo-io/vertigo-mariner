@@ -4,8 +4,6 @@ import java.util.function.Supplier;
 
 @FunctionalInterface
 public interface BTNode {
-	//	String getKey();
-
 	BTStatus eval();
 
 	static BTNode sequence(final BTNode... nodes) {
@@ -16,19 +14,27 @@ public interface BTNode {
 		return new BTSelector(nodes);
 	}
 
+	static BTNode loop(final BTNode node) {
+		return new BTLoop(succeed(), node, fail());
+	}
+
 	static BTNode loopUntil(final BTNode untilCondition, final BTNode node) {
-		return new BTLoop(sucess(), node, untilCondition);
+		return new BTLoop(succeed(), node, untilCondition);
 	}
 
 	static BTNode condition(final Supplier<Boolean> test) {
 		return () -> test.get() ? BTStatus.Succeeded : BTStatus.Failed;
 	}
 
-	static BTNode sucess() {
+	static BTNode succeed() {
 		return () -> BTStatus.Succeeded;
 	}
 
-	static BTNode failed() {
+	static BTNode fail() {
 		return () -> BTStatus.Failed;
+	}
+
+	static BTNode stop() {
+		return () -> BTStatus.Stopped;
 	}
 }

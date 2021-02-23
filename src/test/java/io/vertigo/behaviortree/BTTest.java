@@ -16,7 +16,7 @@ public class BTTest {
 	public void test() {
 		final State state = new State();
 		//state.values.put("name", "john");
-		new BTRoot(goal(state)).run();
+		new BTRoot(BTNode.loop(goal(state))).exec();
 
 	}
 
@@ -26,7 +26,7 @@ public class BTTest {
 				selector(
 						sequence(
 								state.equals(INTENTION, "X"),
-								BTNode.failed()),
+								BTNode.stop()),
 						sequence(
 								dispatch(state),
 								rate(state),

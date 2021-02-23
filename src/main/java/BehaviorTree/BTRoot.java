@@ -12,10 +12,7 @@ public final class BTRoot {
 		this.rootNode = rootNode;
 	}
 
-	public void run() {
-		var status = rootNode.eval();
-		while (status == BTStatus.Succeeded) {
-			status = rootNode.eval();
-		}
+	public void exec() {
+		rootNode.eval();
 	}
 }
