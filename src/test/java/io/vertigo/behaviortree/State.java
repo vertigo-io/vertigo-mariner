@@ -14,7 +14,7 @@ import io.vertigo.core.util.StringUtil;
 
 public final class State {
 	private final Scanner sc = new Scanner(System.in);
-	public final Map<String, String> values = new LinkedHashMap<>();
+	private final Map<String, String> values = new LinkedHashMap<>();
 
 	private String get(final String key) {
 		return values.get(Utils.format(key, values));
