@@ -33,7 +33,6 @@ final class BTLoop implements BTNode {
 				return BTStatus.Failed;
 
 			final var untilTest = untilCondition.eval();
-			System.out.println("------------>" + untilTest);
 			if (untilTest == BTStatus.Succeeded)
 				return BTStatus.Succeeded;
 		}

@@ -47,34 +47,27 @@ public class BTTest {
 	private static BTNode weather(final State state) {
 		return sequence(
 				state.fulfill("w/city", "Please choose a city"),
-				state.display("w/display", "It's sunny in {{w/city}} !"));
+				state.display("It's sunny in {{w/city}} !"));
 	}
 
 	private static BTNode ticket(final State state) {
 		return sequence(
-				state.display("t/begin", "You have chosen to book a ticket, I have some questions..."),
+				state.display("You have chosen to book a ticket, I have some questions..."),
 				state.fulfill("t/return", "Do you want a return ticket  ? Y/N", "Y", "N"),
 				state.fulfill("t/from", "from ?"),
 				state.fulfill("t/to", "to ?"),
 				state.fulfill("t/count", "How many tickets ?", Utils.isInteger()),
 				loopUntil(state.equals2("t/idx", "t/count"),
 						sequence(
-								//								state.notEquals2("t/idx", "t/count"),
-								state.clear("t/name/{{t/idx}}"),
 								state.inc("t/idx"),
 								state.fulfill("t/name/{{t/idx}}", "What is the name of the {{t/idx}} person ?"),
-								state.display("t/display", "{{t/idx}}"))),
-				//								state.inc("t/idx"))),
-				//				state.clear("t/name/{{t/idx}}"),
-				//					state.clear("t/display"))),
-				//						"t/index < t/count",
-				//						state.fulfill("t/name", "What is your name ?")),
-				state.display("t/end", "Thank you, your ticket will be sent ..."));
+								state.display("The ticket {{t/idx}} is booked"))),
+				state.display("Thank you, your ticket will be sent ..."));
 	}
 
 	private static BTNode rate(final State state) {
 		return sequence(
 				state.fulfill("rate/rating", "Please rate the response [0, 1, 2, 3, 4, 5]", "0", "1", "2", "3", "4", "5"),
-				state.display("rate/display", "You have rated {{rate/rating}}"));
+				state.display("You have rated {{rate/rating}}"));
 	}
 }

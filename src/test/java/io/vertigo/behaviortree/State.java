@@ -15,8 +15,16 @@ public final class State {
 	private final Scanner sc = new Scanner(System.in);
 	public final Map<String, String> values = new LinkedHashMap();
 
+	private String get(final String key) {
+		return values.get(Utils.format(key, values));
+	}
+
+	private void put(final String key, final String value) {
+		values.put(Utils.format(key, values), value);
+	}
+
 	private BTNode isFulFilled(final String key) {
-		return BTNode.condition(() -> values.get(key) != null);
+		return BTNode.condition(() -> get(key) != null);
 	}
 
 	private BTNode query(final String key, final String answer, final Predicate<String> validator) {
@@ -25,7 +33,7 @@ public final class State {
 			//---
 			final String input = sc.nextLine();
 			if (validator.test(input)) {
-				values.put(key, input);
+				put(key, input);
 				return BTStatus.Succeeded;
 			}
 			System.err.println("error parsing : result " + answer);
@@ -35,22 +43,24 @@ public final class State {
 
 	public BTNode inc(final String key) {
 		return () -> {
-			final var s = values.getOrDefault(key, "0");
+			var s = get(key);
+			if (s == null)
+				s = "0";
 			final int value = Integer.valueOf(s).intValue() + 1;
-			values.put(key, "" + value);
+			put(key, "" + value);
 			return BTStatus.Succeeded;
 		};
 	}
 
-	public BTNode init(final String key, final int value) {
-		return () -> {
-			if (values.get(key) == null) {
-				values.put(key, "" + value);
-			}
-			return BTStatus.Succeeded;
-		};
-	}
-
+	/*	public BTNode init(final String key, final int value) {
+			return () -> {
+				if (get(key) == null) {
+					put(key, "" + value);
+				}
+				return BTStatus.Succeeded;
+			};
+		}
+	*/
 	//	public BTNode set(final String key, final int value) {
 	//		return () -> {
 	//			values.put(key, "" + value);
@@ -59,15 +69,15 @@ public final class State {
 	//	}
 
 	public BTNode notEquals2(final String key, final String result) {
-		return BTNode.condition(() -> !Objects.equals(values.get(key), values.get(result)));
+		return BTNode.condition(() -> !Objects.equals(get(key), get(result)));
 	}
 
 	public BTNode equals2(final String key, final String result) {
-		return BTNode.condition(() -> Objects.equals(values.get(key), values.get(result)));
+		return BTNode.condition(() -> Objects.equals(get(key), get(result)));
 	}
 
 	public BTNode equals(final String key, final String result) {
-		return BTNode.condition(() -> Objects.equals(values.get(key), result));
+		return BTNode.condition(() -> Objects.equals(get(key), result));
 	}
 
 	public BTNode fulfill(final String key, final String answer) {
@@ -106,12 +116,12 @@ public final class State {
 		};
 	}
 
-	public BTNode display(final String key, final String msg) {
+	public BTNode display(final String msg) {
 		return BTNode.selector(
-				equals(key, "ok"),
+				//				equals(key, "ok"),
 				() -> {
 					System.out.println(Utils.format(msg, values));
-					values.put(key, "ok");
+					//put(key, "ok");
 					return BTStatus.Succeeded;
 				});
 	}
@@ -125,7 +135,7 @@ public final class State {
 					.append("---")
 					.append(key)
 					.append(" : ")
-					.append(values.get(key));
+					.append(get(key));
 		}
 		return builder.toString();
 	}
