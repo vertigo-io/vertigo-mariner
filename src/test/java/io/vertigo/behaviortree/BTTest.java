@@ -17,6 +17,7 @@ public class BTTest {
 		final State state = new State();
 		//state.values.put("name", "john");
 		new BTRoot(goal(state)).run();
+
 	}
 
 	private static BTNode goal(final State state) {
@@ -56,13 +57,14 @@ public class BTTest {
 				state.fulfill("t/return", "Do you want a return ticket  ? Y/N", "Y", "N"),
 				state.fulfill("t/from", "from ?"),
 				state.fulfill("t/to", "to ?"),
-				state.fulfill("t/count", "How many tickets ?", Utils.isInteger()),
+				state.fulfill("t/count", "How many tickets ?",
+						Utils.isInteger().and(s -> Integer.valueOf(s) > 0 && Integer.valueOf(s) < 10)),
 				loopUntil(state.equals2("t/idx", "t/count"),
 						sequence(
 								state.inc("t/idx"),
 								state.fulfill("t/name/{{t/idx}}", "What is the name of the {{t/idx}} person ?"),
 								state.display("The ticket {{t/idx}} is booked"))),
-				state.display("Thank you, your ticket will be sent ..."));
+				state.display("Thank you, your ticket from {{t/from}} to {{t/to}} for {{t/count}} persons will be sent..."));
 	}
 
 	private static BTNode rate(final State state) {
