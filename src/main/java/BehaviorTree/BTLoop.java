@@ -4,11 +4,11 @@ import io.vertigo.core.lang.Assertion;
 
 final class BTLoop implements BTNode {
 	private final int MAX = 1_000;
-	private final BTNode whileCondition;
-	private final BTNode untilCondition;
+	private final BTCondition whileCondition;
+	private final BTCondition untilCondition;
 	private final BTNode node;
 
-	BTLoop(final BTNode whileCondition, final BTNode node, final BTNode untilCondition) {
+	BTLoop(final BTCondition whileCondition, final BTNode node, final BTCondition untilCondition) {
 		Assertion.check()
 				.isNotNull(whileCondition)
 				.isNotNull(untilCondition)

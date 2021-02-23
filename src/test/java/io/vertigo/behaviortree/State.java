@@ -7,6 +7,7 @@ import java.util.Objects;
 import java.util.Scanner;
 import java.util.function.Predicate;
 
+import BehaviorTree.BTCondition;
 import BehaviorTree.BTNode;
 import BehaviorTree.BTStatus;
 import io.vertigo.core.util.StringUtil;
@@ -68,7 +69,7 @@ public final class State {
 	//		};
 	//	}
 
-	public BTNode equals(final String key, final String result) {
+	public BTCondition equals(final String key, final String result) {
 		return BTNode.condition(() -> Objects.equals(get(key), Utils.format(result, values)));
 	}
 

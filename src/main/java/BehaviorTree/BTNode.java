@@ -18,23 +18,24 @@ public interface BTNode {
 		return new BTLoop(succeed(), node, fail());
 	}
 
-	static BTNode loopUntil(final BTNode untilCondition, final BTNode node) {
+	static BTNode loopUntil(final BTCondition untilCondition, final BTNode node) {
 		return new BTLoop(succeed(), node, untilCondition);
 	}
 
-	static BTNode condition(final Supplier<Boolean> test) {
-		return () -> test.get() ? BTStatus.Succeeded : BTStatus.Failed;
+	static BTCondition condition(final Supplier<Boolean> test) {
+		return new BTCondition(test);
 	}
 
-	static BTNode succeed() {
-		return () -> BTStatus.Succeeded;
+	static BTCondition succeed() {
+		return condition(() -> true);
 	}
 
-	static BTNode fail() {
-		return () -> BTStatus.Failed;
+	static BTCondition fail() {
+		return condition(() -> false);
 	}
 
 	static BTNode stop() {
+		//It's not a condition !
 		return () -> BTStatus.Stopped;
 	}
 }
