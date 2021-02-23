@@ -10,7 +10,7 @@ import BehaviorTree.BTNode;
 import BehaviorTree.BTRoot;
 
 public class BTTest {
-	private static final String INTENTION = "intention";
+	private static final String INTENTION = "i/name";
 
 	@Test
 	public void test() {
@@ -22,15 +22,17 @@ public class BTTest {
 
 	private static BTNode goal(final State state) {
 		return sequence(
-				state.fulfill(INTENTION, "Select [W]eather, [T]icket or e[X]it ?", "W", "T", "X"),
+				state.fulfill("u/name", "Hello I'm Alan what is your name ?"),
+				state.fulfill(INTENTION, "Hi {{u/name}} please select [W]eather, [T]icket or e[X]it ?", "W", "T", "X"),
 				selector(
 						sequence(
 								state.equals(INTENTION, "X"),
+								state.display("bye bye {{u/name}}"),
 								BTNode.stop()),
 						sequence(
 								dispatch(state),
-								rate(state),
-								state.clearAll())));
+								rate(state))),
+				state.clear("i/*"));
 	}
 
 	private static BTNode dispatch(final State state) {
@@ -44,7 +46,8 @@ public class BTTest {
 	private static BTNode weather(final State state) {
 		return sequence(
 				state.fulfill("w/city", "Please choose a city"),
-				state.display("It's sunny in {{w/city}} !"));
+				state.display("It's sunny in {{w/city}} !"),
+				state.clear("w/*"));
 	}
 
 	private static BTNode ticket(final State state) {
@@ -60,7 +63,8 @@ public class BTTest {
 								state.inc("t/idx"),
 								state.fulfill("t/name/{{t/idx}}", "What is the name of the {{t/idx}} person ?"),
 								state.display("The ticket {{t/idx}} is booked"))),
-				state.display("Thank you, your ticket from {{t/from}} to {{t/to}} for {{t/count}} persons will be sent..."));
+				state.display("Thank you, your ticket from {{t/from}} to {{t/to}} for {{t/count}} persons will be sent..."),
+				state.clear("t/*"));
 	}
 
 	private static BTNode rate(final State state) {
