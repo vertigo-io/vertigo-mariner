@@ -62,15 +62,33 @@ public final class State {
 			};
 		}
 	*/
-	//	public BTNode set(final String key, final int value) {
-	//		return () -> {
-	//			values.put(key, "" + value);
-	//			return BTStatus.Succeeded;
-	//		};
-	//	}
 
-	public BTCondition equals(final String key, final String result) {
-		return BTNode.condition(() -> Objects.equals(get(key), Utils.format(result, values)));
+	public BTNode set(final String key, final int value) {
+		return () -> {
+			values.put(key, "" + value);
+			return BTStatus.Succeeded;
+		};
+	}
+
+	public BTCondition eq(final String key, final String result) {
+		return BTNode.condition(() -> Objects.equals(get(key),
+				Utils.format(result, values)));
+	}
+
+	public BTCondition gt(final String key, final String compare) {
+		return BTNode.condition(() -> {
+			final int k = Integer.valueOf(get(key)).intValue();
+			final int c = Integer.valueOf(Utils.format(compare, values)).intValue();
+			return c > k;
+		});
+	}
+
+	public BTCondition lt(final String key, final String compare) {
+		return BTNode.condition(() -> {
+			final int k = Integer.valueOf(get(key)).intValue();
+			final int c = Integer.valueOf(Utils.format(compare, values)).intValue();
+			return c < k;
+		});
 	}
 
 	public BTNode fulfill(final String key, final String answer) {
