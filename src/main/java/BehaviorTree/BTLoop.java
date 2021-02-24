@@ -4,14 +4,10 @@ import io.vertigo.core.lang.Assertion;
 
 final class BTLoop implements BTNode {
 	/* This is a security to break the loop if the condition is never attempted */
-	private static final int MAX = 1_000;
+	static final int MAX_LOOPS = 10_000;
 	private final BTCondition whileCondition;
 	private final BTCondition untilCondition;
 	private final BTNode node;
-
-	BTLoop(final BTCondition whileCondition, final BTNode node, final BTCondition untilCondition) {
-		this(MAX, whileCondition, node, untilCondition);
-	}
 
 	BTLoop(final int loops, final BTCondition whileCondition, final BTNode node, final BTCondition untilCondition) {
 		Assertion.check()
@@ -27,7 +23,7 @@ final class BTLoop implements BTNode {
 
 	@Override
 	public BTStatus eval() {
-		for (int i = 0; i < MAX; i++) {
+		for (int i = 0; i < MAX_LOOPS; i++) {
 			final var whileTest = whileCondition.eval();
 			//breaks the loop when the while condition failed
 			if (whileTest.isFailed())

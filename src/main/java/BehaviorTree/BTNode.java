@@ -37,16 +37,20 @@ public interface BTNode {
 		return new BTSelector(nodes);
 	}
 
+	static BTNode loop(final BTNode node) {
+		return new BTLoop(BTLoop.MAX_LOOPS, succeed(), node, fail());
+	}
+
 	static BTNode loop(final int rounds, final BTNode node) {
 		return new BTLoop(rounds, succeed(), node, fail());
 	}
 
 	static BTNode loopWhile(final BTCondition whileCondition, final BTNode node) {
-		return new BTLoop(whileCondition, node, fail());
+		return new BTLoop(BTLoop.MAX_LOOPS, whileCondition, node, fail());
 	}
 
 	static BTNode loopUntil(final BTCondition untilCondition, final BTNode node) {
-		return new BTLoop(succeed(), node, untilCondition);
+		return new BTLoop(BTLoop.MAX_LOOPS, succeed(), node, untilCondition);
 	}
 
 	static BTCondition condition(final Supplier<Boolean> test) {
