@@ -3,16 +3,22 @@ package BehaviorTree;
 import io.vertigo.core.lang.Assertion;
 
 final class BTLoop implements BTNode {
-	private final int MAX = 1_000;
+	/* This is a security to break the loop if the condition is never attempted */
+	private static final int MAX = 1_000;
 	private final BTCondition whileCondition;
 	private final BTCondition untilCondition;
 	private final BTNode node;
 
 	BTLoop(final BTCondition whileCondition, final BTNode node, final BTCondition untilCondition) {
+		this(MAX, whileCondition, node, untilCondition);
+	}
+
+	BTLoop(final int loops, final BTCondition whileCondition, final BTNode node, final BTCondition untilCondition) {
 		Assertion.check()
+				.isTrue(loops >= 0, "loops must be >= 0")
 				.isNotNull(whileCondition)
-				.isNotNull(untilCondition)
-				.isNotNull(node);
+				.isNotNull(node)
+				.isNotNull(untilCondition);
 		//---
 		this.whileCondition = whileCondition;
 		this.node = node;
@@ -28,7 +34,7 @@ final class BTLoop implements BTNode {
 				return BTStatus.Succeeded;
 
 			final var status = node.eval();
-			//loop when succeeded until a fail or a stop
+			//loops when succeeded until a fail or a stop
 			if (!status.isSucceeded()) {
 				return status;
 			}

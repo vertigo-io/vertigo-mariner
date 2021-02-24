@@ -15,16 +15,34 @@ public interface BTNode {
 		return sequence(condition, this);
 	}
 
+	/**
+	 * Creates a sequence. 
+	 * Succeeds when all nodes succeed
+	 * Fails when one node fails, the next nodes are not evaluated
+	 * @param nodes nodes 
+	 * @return sequence
+	 */
 	static BTNode sequence(final BTNode... nodes) {
 		return new BTSequence(nodes);
 	}
 
+	/**
+	 * Creates a selector. 
+	 * Fails when all node fail
+	 * Succeeds when one node succeeds, the newt nodes are not evaluated
+	 * @param nodes nodes 
+	 * @return selector
+	 */
 	static BTNode selector(final BTNode... nodes) {
 		return new BTSelector(nodes);
 	}
 
-	static BTNode loop(final BTNode node) {
-		return new BTLoop(succeed(), node, fail());
+	static BTNode loop(final int rounds, final BTNode node) {
+		return new BTLoop(rounds, succeed(), node, fail());
+	}
+
+	static BTNode loopWhile(final BTCondition whileCondition, final BTNode node) {
+		return new BTLoop(whileCondition, node, fail());
 	}
 
 	static BTNode loopUntil(final BTCondition untilCondition, final BTNode node) {
@@ -36,11 +54,11 @@ public interface BTNode {
 	}
 
 	static BTCondition succeed() {
-		return condition(() -> true);
+		return BTCondition.SUCCEED;
 	}
 
 	static BTCondition fail() {
-		return condition(() -> false);
+		return BTCondition.FAIL;
 	}
 
 	static BTNode stop() {
