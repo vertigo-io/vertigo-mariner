@@ -4,6 +4,10 @@ import static BehaviorTree.BTNode.loopUntil;
 import static BehaviorTree.BTNode.selector;
 import static BehaviorTree.BTNode.sequence;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import BehaviorTree.BTNode;
@@ -94,5 +98,22 @@ public class BTTest {
 		return sequence(
 				state.fulfill("rate/rating", "Please rate the response [0, 1, 2, 3, 4, 5]", "0", "1", "2", "3", "4", "5"),
 				state.display("You have rated {{rate/rating}}"));
+	}
+
+	@Test
+	public void testFormatter() {
+		final Map map = new HashMap<>();
+		map.put("name", "joe");
+		map.put("lastName", "diMagio");
+		Assertions.assertEquals("joe", Utils.format("{{name}}", map));
+		Assertions.assertEquals("hello joe", Utils.format("hello {{name}}", map));
+		Assertions.assertEquals("hello joe...", Utils.format("hello {{name}}...", map));
+		Assertions.assertEquals("hello joe diMagio", Utils.format("hello {{name}} {{lastName}}", map));
+		Assertions.assertThrows(IllegalStateException.class,
+				() -> Utils.format("hello {{name}", map));
+		Assertions.assertThrows(IllegalStateException.class,
+				() -> Utils.format("hello {{name", map));
+		//		Assertions.assertThrows(IllegalStateException.class,
+		//				() -> Utils.format("hello name}}", map));
 	}
 }

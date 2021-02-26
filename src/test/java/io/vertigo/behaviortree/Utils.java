@@ -16,23 +16,23 @@ public final class Utils {
 	}
 
 	public static String format(final String msg, final Map<String, String> map) {
+		final String BEGIN_TOKEN = "{{";
+		final String END_TOKEN = "}}";
 		int last = 0;
-		int start = msg.indexOf("{{", last);
+
 		final StringBuilder builder = new StringBuilder();
-		while (start >= 0) {
-			final int end = msg.indexOf("}}", start);
-			if (end <= 0)
+		for (int start = msg.indexOf(BEGIN_TOKEN, last); start >= 0; start = msg.indexOf(BEGIN_TOKEN, last)) {
+			final int end = msg.indexOf(END_TOKEN, start);
+			if (end < 0)
 				throw new IllegalStateException();
-			final var paramName = msg.substring(start + 2, end);
+			final var paramName = msg.substring(start + BEGIN_TOKEN.length(), end);
 			builder
 					.append(msg.substring(last, start))
 					.append(map.getOrDefault(paramName, "not found:" + paramName));
-			last = end + 2;
-			start = msg.indexOf("{{", last);
+			last = end + END_TOKEN.length();
 		}
-		builder
-				.append(msg.substring(last));
-		return builder.toString();
+		return builder
+				.append(msg.substring(last))
+				.toString();
 	}
-
 }
