@@ -14,8 +14,6 @@ import BehaviorTree.BTNode;
 import BehaviorTree.BTRoot;
 
 public class BTTest {
-	private static final String INTENTION = "i/name";
-
 	@Test
 	public void test() {
 		final State state = new State();
@@ -27,10 +25,10 @@ public class BTTest {
 	private static BTNode goal(final State state) {
 		return sequence(
 				state.fulfill("u/name", "Hello I'm Alan what is your name ?"),
-				state.fulfill(INTENTION, "Hi {{u/name}} please select [W]eather, [T]icket, [G]ame or e[X]it ?", "W", "G", "T", "X"),
+				state.fulfill("i/name", "Hi {{u/name}} please select [W]eather, [T]icket, [G]ame or e[X]it ?", "W", "G", "T", "X"),
 				selector(
 						sequence(
-								state.eq(INTENTION, "X"),
+								state.eq("i/name", "X"),
 								state.display("bye bye {{u/name}}"),
 								BTNode.stop()),
 						sequence(
@@ -43,11 +41,11 @@ public class BTTest {
 	private static BTNode dispatch(final State state) {
 		return selector(
 				weather(state)
-						.guardedBy(state.eq(INTENTION, "W")),
+						.guardedBy(state.eq("i/name", "W")),
 				game(state)
-						.guardedBy(state.eq(INTENTION, "G")),
+						.guardedBy(state.eq("i/name", "G")),
 				ticket(state)
-						.guardedBy(state.eq(INTENTION, "T")));
+						.guardedBy(state.eq("i/name", "T")));
 	}
 
 	private static BTNode weather(final State state) {
