@@ -68,8 +68,8 @@ public class BTTest {
 				loopUntil(state.eq("t/idx", "{{t/count}}"),
 						sequence(
 								state.inc("t/idx"),
-								state.fulfill("t/name/{{t/idx}}", "What is the name of the {{t/idx}} person ?"),
-								state.display("The ticket {{t/idx}} is booked"))),
+								state.fulfill("t/{{t/idx}}/name", "What is the name of the {{t/idx}} person ?"),
+								state.display("The ticket {{t/idx}} is booked for {{t/{{t/idx}}/name}}"))),
 				state.display("Thank you, your ticket from {{t/from}} to {{t/to}} for {{t/count}} persons will be sent..."),
 				state.clear("t/*"));
 	}
@@ -115,5 +115,9 @@ public class BTTest {
 				() -> Utils.format("hello {{name", map));
 		Assertions.assertThrows(IllegalStateException.class,
 				() -> Utils.format("hello name}}", map));
+		map.put("u/1/name", "alan");
+		map.put("u/2/name", "ada");
+		map.put("u/idx", "2");
+		Assertions.assertEquals("hello ada", Utils.format("hello {{u/{{u/idx}}/name}}", map));
 	}
 }
