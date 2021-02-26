@@ -18,21 +18,25 @@ public final class Utils {
 	public static String format(final String msg, final Map<String, String> map) {
 		final String BEGIN_TOKEN = "{{";
 		final String END_TOKEN = "}}";
-		int last = 0;
 
 		final StringBuilder builder = new StringBuilder();
-		for (int start = msg.indexOf(BEGIN_TOKEN, last); start >= 0; start = msg.indexOf(BEGIN_TOKEN, last)) {
+		int last = 0;
+		int start = -1;
+		while ((start = msg.indexOf(BEGIN_TOKEN, last)) >= 0) {
 			final int end = msg.indexOf(END_TOKEN, start);
-			if (end < 0)
-				throw new IllegalStateException();
+			if (end < 0) {
+				throw new IllegalStateException("the end token '" + END_TOKEN + "+'is not found");
+			}
 			final var paramName = msg.substring(start + BEGIN_TOKEN.length(), end);
 			builder
 					.append(msg.substring(last, start))
 					.append(map.getOrDefault(paramName, "not found:" + paramName));
 			last = end + END_TOKEN.length();
 		}
-		return builder
-				.append(msg.substring(last))
-				.toString();
+		final int end = msg.indexOf(END_TOKEN, last);
+		if (end > 0) {
+			throw new IllegalStateException("the end token '" + END_TOKEN + "+'has been found without a start token " + BEGIN_TOKEN);
+		}
+		return builder.append(msg.substring(last)).toString();
 	}
 }

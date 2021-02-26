@@ -113,7 +113,7 @@ public class BTTest {
 				() -> Utils.format("hello {{name}", map));
 		Assertions.assertThrows(IllegalStateException.class,
 				() -> Utils.format("hello {{name", map));
-		//		Assertions.assertThrows(IllegalStateException.class,
-		//				() -> Utils.format("hello name}}", map));
+		Assertions.assertThrows(IllegalStateException.class,
+				() -> Utils.format("hello name}}", map));
 	}
 }
