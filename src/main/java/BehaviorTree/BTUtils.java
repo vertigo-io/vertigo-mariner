@@ -3,7 +3,9 @@ package BehaviorTree;
 import java.util.Map;
 import java.util.function.Predicate;
 
-public final class Utils {
+import io.vertigo.core.lang.Assertion;
+
+public final class BTUtils {
 	public static Predicate<String> isInteger() {
 		return s -> {
 			try {
@@ -16,6 +18,10 @@ public final class Utils {
 	}
 
 	public static String format(final String msg, final Map<String, String> map) {
+		Assertion.check()
+				.isNotBlank(msg)
+				.isNotNull(map);
+		//---
 		final String START_TOKEN = "{{";
 		final String END_TOKEN = "}}";
 

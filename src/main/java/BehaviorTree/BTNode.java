@@ -66,7 +66,7 @@ public interface BTNode {
 	}
 
 	static BTNode stop() {
-		//It's not a condition !
+		//Stop is not a condition !
 		return () -> BTStatus.Stopped;
 	}
 }

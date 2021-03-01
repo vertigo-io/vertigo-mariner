@@ -10,7 +10,7 @@ import BehaviorTree.BTNode;
 import BehaviorTree.BTStatus;
 import io.vertigo.core.util.StringUtil;
 
-public final class State {
+public final class BTChat {
 	private final Scanner sc = new Scanner(System.in);
 	public final BTBlackBoard bb = new BTBlackBoard();
 
