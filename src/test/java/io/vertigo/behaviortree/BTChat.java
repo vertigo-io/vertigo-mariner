@@ -32,12 +32,15 @@ public final class BTChat {
 	}
 
 	private BTNode query(final String key, final String question, final Predicate<String> validator) {
-		final String response = answer(question);
-		if (validator.test(response)) {
-			return set(key, response);
-		}
-		System.err.println("error parsing : result " + question);
-		return BTNode.fail();
+		return () -> {
+			final String response = answer(question);
+			if (validator.test(response)) {
+				bb.put(key, response);
+				return BTStatus.Succeeded;
+			}
+			System.err.println("error parsing : result " + question);
+			return BTStatus.Failed;
+		};
 	}
 
 	public BTCondition isFulFilled(final String key) {
