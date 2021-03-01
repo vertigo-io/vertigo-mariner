@@ -4,22 +4,38 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import io.vertigo.core.lang.Assertion;
+
 public final class BTBlackBoard {
 	private final Map<String, String> values = new LinkedHashMap<>();
+	//	private static final var PATTERN = "[a-z]";
+
+	private void checkKey(final String key) {
+		Assertion.check()
+				.isNotBlank(key);
+		//		.isTrue(, msg, params)
+
+	}
 
 	public String get(final String key) {
-		return values.get(Utils.format(key, values));
+		checkKey(key);
+		//---
+		return values.get(BTUtils.format(key, values));
 	}
 
 	public void put(final String key, final String value) {
-		values.put(Utils.format(key, values), value);
+		checkKey(key);
+		//---
+		values.put(BTUtils.format(key, values), value);
 	}
 
 	public String format(final String msg) {
-		return Utils.format(msg, values);
+		return BTUtils.format(msg, values);
 	}
 
 	public void inc(final String key) {
+		checkKey(key);
+		//---
 		var s = get(key);
 		if (s == null)
 			s = "0";
@@ -28,18 +44,24 @@ public final class BTBlackBoard {
 	}
 
 	public boolean eq(final String key, final String compare) {
-		return Objects.equals(get(key), Utils.format(compare, values));
+		checkKey(key);
+		//---
+		return Objects.equals(get(key), BTUtils.format(compare, values));
 	}
 
 	public boolean gt(final String key, final String compare) {
+		checkKey(key);
+		//---
 		final int k = Integer.valueOf(get(key)).intValue();
-		final int c = Integer.valueOf(Utils.format(compare, values)).intValue();
+		final int c = Integer.valueOf(BTUtils.format(compare, values)).intValue();
 		return c > k;
 	}
 
 	public boolean lt(final String key, final String compare) {
+		checkKey(key);
+		//---
 		final int k = Integer.valueOf(get(key)).intValue();
-		final int c = Integer.valueOf(Utils.format(compare, values)).intValue();
+		final int c = Integer.valueOf(BTUtils.format(compare, values)).intValue();
 		return c < k;
 	}
 
