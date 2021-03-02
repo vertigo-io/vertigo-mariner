@@ -11,7 +11,7 @@ import io.vertigo.core.lang.Builder;
 public final class BotSwitch implements Builder<BTNode> {
 	private final Bot chat;
 	private final String keyTemplate;
-	private final List<BTNode> nodes = new ArrayList<>();
+	private final List<BTNode> selectorNodes = new ArrayList<>();
 
 	BotSwitch(final Bot chat, final String keyTemplate) {
 		Assertion.check()
@@ -26,18 +26,29 @@ public final class BotSwitch implements Builder<BTNode> {
 		return chat.eq(keyTemplate, compare);
 	}
 
-	public BotSwitch when(final String compare, final BTNode node) {
-		nodes.add(node.guardedBy(buildGuard(compare)));
+	public BotSwitch when(final String compare, final BTNode... nodes) {
+		return when(compare, List.of(nodes));
+	}
+
+	public BotSwitch when(final String compare, final List<BTNode> nodes) {
+		selectorNodes.add(
+				BTNode.sequence(nodes)
+						.guardedBy(buildGuard(compare)));
 		return this;
 	}
 
-	public BotSwitch whenOther(final BTNode node) {
-		nodes.add(node);
+	public BotSwitch whenOther(final BTNode... nodes) {
+		return whenOther(List.of(nodes));
+	}
+
+	public BotSwitch whenOther(final List<BTNode> nodes) {
+		selectorNodes.add(
+				BTNode.sequence(nodes));
 		return this;
 	}
 
 	@Override
 	public BTNode build() {
-		return BTNode.selector(nodes.toArray(new BTNode[nodes.size()]));
+		return BTNode.selector(selectorNodes);
 	}
 }

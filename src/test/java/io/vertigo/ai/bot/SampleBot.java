@@ -24,12 +24,12 @@ public class SampleBot {
 				bot.fulfill("u/name", "Hello I'm Alan what is your name ?"),
 				bot.fulfill("i/name", "Hi {{u/name}} please select [W]eather, [T]icket, [G]ame or e[X]it ?", "W", "G", "T", "X"),
 				bot.doSwitch("i/name")
-						.when("X", sequence(
+						.when("X",
 								bot.display("bye bye {{u/name}}"),
-								BTNode.stop()))
-						.whenOther(sequence(
+								BTNode.stop())
+						.whenOther(
 								dispatch(bot),
-								rate(bot)))
+								rate(bot))
 						.build(),
 				bot.clear("i/*"),
 				bot.clear("rate/*"));
@@ -67,10 +67,9 @@ public class SampleBot {
 				bot.fulfill("t/count", "How many tickets ?",
 						BTUtils.isInteger().and(s -> Integer.valueOf(s) > 0 && Integer.valueOf(s) < 10)),
 				loopUntil(bot.eq("t/idx", "{{t/count}}"),
-						sequence(
-								bot.inc("t/idx"),
-								bot.fulfill("t/{{t/idx}}/name", "What is the name of the {{t/idx}} person ?"),
-								bot.display("The ticket {{t/idx}} is booked for {{t/{{t/idx}}/name}}"))),
+						bot.inc("t/idx"),
+						bot.fulfill("t/{{t/idx}}/name", "What is the name of the {{t/idx}} person ?"),
+						bot.display("The ticket {{t/idx}} is booked for {{t/{{t/idx}}/name}}")),
 				bot.display("Thank you, your ticket from {{t/from}} to {{t/to}} for {{t/count}} persons will be sent..."),
 				bot.clear("t/*"));
 	}
@@ -82,16 +81,15 @@ public class SampleBot {
 				bot.set("g/target",
 						Double.valueOf(Math.floor(Math.random() * 101)).intValue()),
 				loopUntil(bot.eq("g/target", "{{g/choice}}"),
-						sequence(
-								bot.clear("g/choice"),
-								bot.fulfill("g/choice", "What is your choice ?"),
-								bot.inc("g/rounds"),
-								selector(
-										bot.display("select down !")
-												.guardedBy(bot.gt("g/target", "{{g/choice}}")),
-										bot.display("select up !")
-												.guardedBy(bot.lt("g/target", "{{g/choice}}")),
-										BTNode.succeed()))),
+						bot.clear("g/choice"),
+						bot.fulfill("g/choice", "What is your choice ?"),
+						bot.inc("g/rounds"),
+						selector(
+								bot.display("select down !")
+										.guardedBy(bot.gt("g/target", "{{g/choice}}")),
+								bot.display("select up !")
+										.guardedBy(bot.lt("g/target", "{{g/choice}}")),
+								BTNode.succeed())),
 				bot.display("Bravo {{u/name}} you have found the right number {{g/target}} in {{g/rounds}} rounds"));
 	}
 

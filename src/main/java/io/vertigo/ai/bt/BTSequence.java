@@ -7,11 +7,11 @@ import io.vertigo.core.lang.Assertion;
 final class BTSequence implements BTNode {
 	private final List<BTNode> nodes;
 
-	BTSequence(final BTNode... nodes) {
+	BTSequence(final List<? extends BTNode> nodes) {
 		Assertion.check()
 				.isNotNull(nodes);
 		//---
-		this.nodes = List.of(nodes);
+		this.nodes = List.copyOf(nodes);
 	}
 
 	@Override
