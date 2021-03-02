@@ -14,7 +14,6 @@ public final class BTBlackBoard {
 		Assertion.check()
 				.isNotBlank(key)
 				.isTrue(key.matches(REGEX), "the key''{0}' must contain only a-z 1-9 words separated with /", key);
-
 	}
 
 	public String get(final String key) {
@@ -66,13 +65,17 @@ public final class BTBlackBoard {
 	}
 
 	public void clear(final String keyPattern) {
-		Assertion.check().isNotBlank(keyPattern);
+		Assertion.check()
+				.isNotBlank(keyPattern);
 		//---
 		if (keyPattern.endsWith("*")) {
 			final var prefix = keyPattern.substring(0, keyPattern.length() - 2);
 			values.keySet().removeIf(s -> s.startsWith(prefix));
 		} else {
-			values.remove(keyPattern);
+			//This is not a pattern, just a key
+			final var key = keyPattern;
+			checkKey(key);
+			values.remove(key);
 		}
 	}
 
