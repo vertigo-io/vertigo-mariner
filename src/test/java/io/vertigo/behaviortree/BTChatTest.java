@@ -36,18 +36,19 @@ public class BTChatTest {
 	}
 
 	private static BTNode dispatch(final BTChat bTChat) {
-		//return xswitch("i/name")(
-		// case("W", Weather())
-		// case("G", Weather())
-		// case("T", Weather())
+		return bTChat.doSwitch("i/name")
+				.when("W", weather(bTChat))
+				.when("G", game(bTChat))
+				.when("T", ticket(bTChat))
+				.build();
 
-		return selector(
-				weather(bTChat)
-						.guardedBy(bTChat.eq("i/name", "W")),
-				game(bTChat)
-						.guardedBy(bTChat.eq("i/name", "G")),
-				ticket(bTChat)
-						.guardedBy(bTChat.eq("i/name", "T")));
+		//		return  selector(
+		//				weather(bTChat)
+		//						.guardedBy(bTChat.eq("i/name", "W")),
+		//				game(bTChat)
+		//						.guardedBy(bTChat.eq("i/name", "G")),
+		//				ticket(bTChat)
+		//						.guardedBy(bTChat.eq("i/name", "T")));
 	}
 
 	private static BTNode weather(final BTChat bTChat) {

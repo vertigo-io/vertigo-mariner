@@ -90,6 +90,10 @@ public final class BTChat {
 		return BTNode.condition(() -> bb.lt(bb.format(keyTemplate), compare));
 	}
 
+	public BTSwitch doSwitch(final String keyTemplate) {
+		return new BTSwitch(this, keyTemplate);
+	}
+
 	public BTNode clear(final String keyPattern) {
 		return () -> {
 			bb.clear(keyPattern);
