@@ -53,7 +53,7 @@ public final class EquipmentWebServices implements WebServices {
 	public List<Equipment> list() {
 		final Equipment e = new Equipment();
 		e.setId(1L);
-		e.setCode("A-Bot");
+		e.setCode("A-BotEngine");
 
 		return List.of(e);
 	}

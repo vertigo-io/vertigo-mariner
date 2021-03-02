@@ -10,7 +10,7 @@ import io.vertigo.ai.bt.BTNode;
 import io.vertigo.ai.bt.BTStatus;
 import io.vertigo.core.util.StringUtil;
 
-public final class Bot {
+public final class BotEngine {
 	private final Scanner sc = new Scanner(System.in);
 	private final BTBlackBoard bb = new BTBlackBoard();
 

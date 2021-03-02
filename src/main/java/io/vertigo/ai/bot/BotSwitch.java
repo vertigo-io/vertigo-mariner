@@ -9,21 +9,21 @@ import io.vertigo.core.lang.Assertion;
 import io.vertigo.core.lang.Builder;
 
 public final class BotSwitch implements Builder<BTNode> {
-	private final Bot chat;
+	private final BotEngine botEngine;
 	private final String keyTemplate;
 	private final List<BTNode> selectorNodes = new ArrayList<>();
 
-	BotSwitch(final Bot chat, final String keyTemplate) {
+	BotSwitch(final BotEngine botEngine, final String keyTemplate) {
 		Assertion.check()
-				.isNotNull(chat)
+				.isNotNull(botEngine)
 				.isNotBlank(keyTemplate);
 		//---
-		this.chat = chat;
+		this.botEngine = botEngine;
 		this.keyTemplate = keyTemplate;
 	}
 
 	private BTCondition buildGuard(final String compare) {
-		return chat.eq(keyTemplate, compare);
+		return botEngine.eq(keyTemplate, compare);
 	}
 
 	public BotSwitch when(final String compare, final BTNode... nodes) {

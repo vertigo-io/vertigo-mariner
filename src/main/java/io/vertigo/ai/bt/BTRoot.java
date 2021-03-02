@@ -12,7 +12,7 @@ public final class BTRoot {
 		this.rootNode = rootNode;
 	}
 
-	public void exec() {
+	public void run() {
 		rootNode.eval();
 	}
 }
