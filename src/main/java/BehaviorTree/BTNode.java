@@ -37,6 +37,10 @@ public interface BTNode {
 		return new BTSelector(nodes);
 	}
 
+	static BTNode doTtry(final int tries, final BTNode node) {
+		return new BTTry(tries, node);
+	}
+
 	static BTNode loop(final BTNode node) {
 		return new BTLoop(BTLoop.MAX_LOOPS, succeed(), node, fail());
 	}

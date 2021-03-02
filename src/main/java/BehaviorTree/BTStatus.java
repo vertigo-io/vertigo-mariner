@@ -12,4 +12,8 @@ public enum BTStatus {
 	public boolean isSucceeded() {
 		return this == Succeeded;
 	}
+
+	public boolean isStopped() {
+		return this == Stopped;
+	}
 }

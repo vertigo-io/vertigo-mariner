@@ -12,15 +12,15 @@ import io.vertigo.core.util.StringUtil;
 
 public final class BTChat {
 	private final Scanner sc = new Scanner(System.in);
-	public final BTBlackBoard bb = new BTBlackBoard();
+	private final BTBlackBoard bb = new BTBlackBoard();
 
-	public BTNode set(final String key, final int value) {
-		return set(key, "" + value);
+	public BTNode set(final String keyTemplate, final int value) {
+		return set(keyTemplate, "" + value);
 	}
 
-	public BTNode set(final String key, final String value) {
+	public BTNode set(final String keyTemplate, final String value) {
 		return () -> {
-			bb.put(key, value);
+			bb.put(bb.format(keyTemplate), value);
 			return BTStatus.Succeeded;
 		};
 	}
@@ -31,37 +31,37 @@ public final class BTChat {
 		return sc.nextLine();
 	}
 
-	private BTNode query(final String key, final String question, final Predicate<String> validator) {
-		return () -> {
+	private BTNode query(final String keyTemplate, final String question, final Predicate<String> validator) {
+		return BTNode.doTtry(3, () -> {
 			final String response = answer(question);
 			if (validator.test(response)) {
-				bb.put(key, response);
+				bb.put(bb.format(keyTemplate), response);
 				return BTStatus.Succeeded;
 			}
-			System.err.println("error parsing : result " + question);
+			System.err.println("error parsing : " + response);
 			return BTStatus.Failed;
-		};
+		});
 	}
 
-	public BTCondition isFulFilled(final String key) {
-		return BTNode.condition(() -> bb.get(key) != null);
+	public BTCondition isFulFilled(final String keyTemplate) {
+		return BTNode.condition(() -> bb.get(bb.format(keyTemplate)) != null);
 	}
 
-	public BTNode fulfill(final String key, final String question) {
+	public BTNode fulfill(final String keyTemplate, final String question) {
 		final Predicate<String> validator = t -> !StringUtil.isBlank(t);
-		return fulfill(key, question, validator);
+		return fulfill(keyTemplate, question, validator);
 	}
 
-	public BTNode fulfill(final String key, final String question, final String... choices) {
+	public BTNode fulfill(final String keyTemplate, final String question, final String... choices) {
 		final List<String> choiceList = List.of(choices);
 		final Predicate<String> validator = t -> choiceList.contains(t);
-		return fulfill(key, question, validator);
+		return fulfill(keyTemplate, question, validator);
 	}
 
-	public BTNode fulfill(final String key, final String question, final Predicate<String> validator) {
+	public BTNode fulfill(final String keyTemplate, final String question, final Predicate<String> validator) {
 		return BTNode.selector(
-				isFulFilled(key),
-				query(key, question, validator));
+				isFulFilled(keyTemplate),
+				query(keyTemplate, question, validator));
 	}
 
 	public BTNode display(final String msg) {
@@ -71,23 +71,23 @@ public final class BTChat {
 		};
 	}
 
-	public BTNode inc(final String key) {
+	public BTNode inc(final String keyTemplate) {
 		return () -> {
-			bb.inc(key);
+			bb.inc(bb.format(keyTemplate));
 			return BTStatus.Succeeded;
 		};
 	}
 
-	public BTCondition eq(final String key, final String compare) {
-		return BTNode.condition(() -> bb.eq(key, compare));
+	public BTCondition eq(final String keytemplate, final String compare) {
+		return BTNode.condition(() -> bb.eq(bb.format(keytemplate), compare));
 	}
 
-	public BTCondition gt(final String key, final String compare) {
-		return BTNode.condition(() -> bb.gt(key, compare));
+	public BTCondition gt(final String keyTemplate, final String compare) {
+		return BTNode.condition(() -> bb.gt(bb.format(keyTemplate), compare));
 	}
 
-	public BTCondition lt(final String key, final String compare) {
-		return BTNode.condition(() -> bb.lt(key, compare));
+	public BTCondition lt(final String keyTemplate, final String compare) {
+		return BTNode.condition(() -> bb.lt(bb.format(keyTemplate), compare));
 	}
 
 	public BTNode clear(final String keyPattern) {
