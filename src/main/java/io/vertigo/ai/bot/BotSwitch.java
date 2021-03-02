@@ -1,19 +1,19 @@
-package io.vertigo.behaviortree;
+package io.vertigo.ai.bot;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import BehaviorTree.BTCondition;
-import BehaviorTree.BTNode;
+import io.vertigo.ai.bt.BTCondition;
+import io.vertigo.ai.bt.BTNode;
 import io.vertigo.core.lang.Assertion;
 import io.vertigo.core.lang.Builder;
 
-public final class BTSwitch implements Builder<BTNode> {
-	private final BTChat chat;
+public final class BotSwitch implements Builder<BTNode> {
+	private final Bot chat;
 	private final String keyTemplate;
 	private final List<BTNode> nodes = new ArrayList<>();
 
-	BTSwitch(final BTChat chat, final String keyTemplate) {
+	BotSwitch(final Bot chat, final String keyTemplate) {
 		Assertion.check()
 				.isNotNull(chat)
 				.isNotBlank(keyTemplate);
@@ -26,12 +26,12 @@ public final class BTSwitch implements Builder<BTNode> {
 		return chat.eq(keyTemplate, compare);
 	}
 
-	public BTSwitch when(final String compare, final BTNode node) {
+	public BotSwitch when(final String compare, final BTNode node) {
 		nodes.add(node.guardedBy(buildGuard(compare)));
 		return this;
 	}
 
-	public BTSwitch whenOther(final BTNode node) {
+	public BotSwitch whenOther(final BTNode node) {
 		nodes.add(node);
 		return this;
 	}

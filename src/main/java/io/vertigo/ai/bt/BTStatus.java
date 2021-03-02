@@ -1,4 +1,4 @@
-package BehaviorTree;
+package io.vertigo.ai.bt;
 
 public enum BTStatus {
 	Succeeded,

@@ -1,13 +1,13 @@
-package BehaviorTree;
+package io.vertigo.ai.bt;
 
 import java.util.List;
 
 import io.vertigo.core.lang.Assertion;
 
-final class BTSequence implements BTNode {
+final class BTSelector implements BTNode {
 	private final List<BTNode> nodes;
 
-	BTSequence(final BTNode... nodes) {
+	BTSelector(final BTNode... nodes) {
 		Assertion.check()
 				.isNotNull(nodes);
 		//---
@@ -18,11 +18,11 @@ final class BTSequence implements BTNode {
 	public BTStatus eval() {
 		for (final BTNode node : nodes) {
 			final var status = node.eval();
-			//continue when succeeded until a fail or a stop
-			if (!status.isSucceeded()) {
+			//continue when failed until a success or a stop
+			if (!status.isFailed()) {
 				return status;
 			}
 		}
-		return BTStatus.Succeeded;
+		return BTStatus.Failed;
 	}
 }

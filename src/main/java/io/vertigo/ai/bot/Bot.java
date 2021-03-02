@@ -1,16 +1,16 @@
-package io.vertigo.behaviortree;
+package io.vertigo.ai.bot;
 
 import java.util.List;
 import java.util.Scanner;
 import java.util.function.Predicate;
 
-import BehaviorTree.BTBlackBoard;
-import BehaviorTree.BTCondition;
-import BehaviorTree.BTNode;
-import BehaviorTree.BTStatus;
+import io.vertigo.ai.bt.BTBlackBoard;
+import io.vertigo.ai.bt.BTCondition;
+import io.vertigo.ai.bt.BTNode;
+import io.vertigo.ai.bt.BTStatus;
 import io.vertigo.core.util.StringUtil;
 
-public final class BTChat {
+public final class Bot {
 	private final Scanner sc = new Scanner(System.in);
 	private final BTBlackBoard bb = new BTBlackBoard();
 
@@ -90,8 +90,8 @@ public final class BTChat {
 		return BTNode.condition(() -> bb.lt(bb.format(keyTemplate), compare));
 	}
 
-	public BTSwitch doSwitch(final String keyTemplate) {
-		return new BTSwitch(this, keyTemplate);
+	public BotSwitch doSwitch(final String keyTemplate) {
+		return new BotSwitch(this, keyTemplate);
 	}
 
 	public BTNode clear(final String keyPattern) {

@@ -1,11 +1,9 @@
-package io.vertigo.behaviortree;
+package io.vertigo.ai.bt;
 
 import java.util.Map;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import BehaviorTree.BTUtils;
 
 public class BTUtilTest {
 	@Test

@@ -1,4 +1,4 @@
-package BehaviorTree;
+package io.vertigo.ai.bt;
 
 import java.util.Map;
 import java.util.function.Predicate;
