@@ -32,7 +32,7 @@ public final class BTChat {
 	}
 
 	private BTNode query(final String keyTemplate, final String question, final Predicate<String> validator) {
-		return BTNode.doTtry(3, () -> {
+		return BTNode.doTry(3, () -> {
 			final String response = answer(question);
 			if (validator.test(response)) {
 				bb.put(bb.format(keyTemplate), response);

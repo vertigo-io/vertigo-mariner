@@ -37,7 +37,7 @@ public interface BTNode {
 		return new BTSelector(nodes);
 	}
 
-	static BTNode doTtry(final int tries, final BTNode node) {
+	static BTNode doTry(final int tries, final BTNode node) {
 		return new BTTry(tries, node);
 	}
 
