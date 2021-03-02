@@ -23,14 +23,14 @@ public class BTChatTest {
 		return sequence(
 				bTChat.fulfill("u/name", "Hello I'm Alan what is your name ?"),
 				bTChat.fulfill("i/name", "Hi {{u/name}} please select [W]eather, [T]icket, [G]ame or e[X]it ?", "W", "G", "T", "X"),
-				selector(
-						sequence(
-								bTChat.eq("i/name", "X"),
+				bTChat.doSwitch("i/name")
+						.when("X", sequence(
 								bTChat.display("bye bye {{u/name}}"),
-								BTNode.stop()),
-						sequence(
+								BTNode.stop()))
+						.whenOther(sequence(
 								dispatch(bTChat),
-								rate(bTChat))),
+								rate(bTChat)))
+						.build(),
 				bTChat.clear("i/*"),
 				bTChat.clear("rate/*"));
 	}

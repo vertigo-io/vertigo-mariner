@@ -78,8 +78,8 @@ public final class BTChat {
 		};
 	}
 
-	public BTCondition eq(final String keytemplate, final String compare) {
-		return BTNode.condition(() -> bb.eq(bb.format(keytemplate), compare));
+	public BTCondition eq(final String keyTemplate, final String compare) {
+		return BTNode.condition(() -> bb.eq(bb.format(keyTemplate), compare));
 	}
 
 	public BTCondition gt(final String keyTemplate, final String compare) {

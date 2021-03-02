@@ -31,6 +31,11 @@ public final class BTSwitch implements Builder<BTNode> {
 		return this;
 	}
 
+	public BTSwitch whenOther(final BTNode node) {
+		nodes.add(node);
+		return this;
+	}
+
 	@Override
 	public BTNode build() {
 		return BTNode.selector(nodes.toArray(new BTNode[nodes.size()]));
