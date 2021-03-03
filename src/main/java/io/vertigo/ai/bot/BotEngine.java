@@ -1,5 +1,6 @@
 package io.vertigo.ai.bot;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.function.Predicate;
@@ -47,14 +48,18 @@ public final class BotEngine {
 		return BTNode.condition(() -> bb.get(bb.format(keyTemplate)) != null);
 	}
 
+	//2 args 
 	public BTNode fulfill(final String keyTemplate, final String question) {
 		final Predicate<String> validator = t -> !StringUtil.isBlank(t);
 		return fulfill(keyTemplate, question, validator);
 	}
 
-	public BTNode fulfill(final String keyTemplate, final String question, final String... choices) {
-		final List<String> choiceList = List.of(choices);
-		final Predicate<String> validator = t -> choiceList.contains(t);
+	//3+ args 
+	public BTNode fulfill(final String keyTemplate, final String question, final String choice, final String... otherChoices) {
+		final List<String> choices = new ArrayList<>();
+		choices.add(choice);
+		choices.addAll(List.of(otherChoices));
+		final Predicate<String> validator = t -> choices.contains(t);
 		return fulfill(keyTemplate, question, validator);
 	}
 
