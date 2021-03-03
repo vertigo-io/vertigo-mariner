@@ -8,11 +8,14 @@ import io.vertigo.ai.bt.BTBlackBoard;
 import io.vertigo.ai.bt.BTCondition;
 import io.vertigo.ai.bt.BTNode;
 import io.vertigo.ai.bt.BTStatus;
+import io.vertigo.core.lang.BasicType;
 import io.vertigo.core.util.StringUtil;
+import io.vertigo.datamodel.structure.definitions.FormatterException;
 
 public final class DQMAssistantEngine {
 	private final Scanner sc = new Scanner(System.in);
 	public final BTBlackBoard bb = new BTBlackBoard();
+	private final DQMFormatter dqmFormatter = new DQMFormatter();
 
 	public BTNode set(final String key, final int value) {
 		return set(key, "" + value);
@@ -42,6 +45,32 @@ public final class DQMAssistantEngine {
 
 			return BTStatus.Failed;
 		};
+	}
+
+	private BTNode testType(final String key, final BasicType basicType) {
+		return BTNode.sequence(() -> {
+			try {
+				dqmFormatter.stringToValue(bb.get(key), basicType);
+				return BTStatus.Succeeded;
+			} catch (final FormatterException e) {
+				return BTStatus.Failed;
+			}
+		}, set(key + "/type", basicType.name()));
+
+	}
+
+	public BTNode probeType(final String key) {
+		return BTNode.selector(
+				testType(key, BasicType.Integer),
+				testType(key, BasicType.Long),
+				testType(key, BasicType.Double),
+				testType(key, BasicType.BigDecimal),
+				testType(key, BasicType.Boolean),
+				testType(key, BasicType.LocalDate),
+				testType(key, BasicType.Instant),
+				testType(key, BasicType.String)// fallback
+		);
+
 	}
 
 	public BTCondition isFulFilled(final String key) {
