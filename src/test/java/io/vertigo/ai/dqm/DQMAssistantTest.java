@@ -5,6 +5,7 @@ import static io.vertigo.ai.bt.BTNode.sequence;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Supplier;
 
 import org.junit.jupiter.api.Test;
 
@@ -17,19 +18,27 @@ public class DQMAssistantTest {
 	@Test
 	public void test() {
 		final DQMAssistantEngine state = new DQMAssistantEngine();
-		final BTNode lineHandleNode = handleLine(state);
 		final List<ContactData> contacts = createFakeContacts();
 
-		contacts.forEach(contact -> new BTRoot(sequence(
-				injectData(contact, state),
-				lineHandleNode,
-				clearData(state))).run());
+		new BTRoot(
+				sequence(
+						state.inc("linenumber"), // setup
+						BTNode.loop(
+								sequence(
+										BTNode.selector(
+												state.gt("linenumber", "" + contacts.size()),
+												BTNode.stop()),
+										sequence(
+												injectData(() -> contacts.get(Integer.parseInt(state.bb.get("linenumber")) - 1), state),
+												handleLine(state),
+												clearData(state),
+												state.inc("linenumber")))))).run();
 
 	}
 
-	private static BTNode injectData(final Map<String, String> data, final DQMAssistantEngine state) {
+	private static BTNode injectData(final Supplier<Map<String, String>> dataSupplier, final DQMAssistantEngine state) {
 		return () -> {
-			data.forEach((key, value) -> state.bb.put("source/" + key, value));
+			dataSupplier.get().forEach((key, value) -> state.bb.put("source/" + key, value));
 			return BTStatus.Succeeded;
 		};
 	}
