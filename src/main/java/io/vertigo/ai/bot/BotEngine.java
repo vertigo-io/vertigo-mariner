@@ -11,9 +11,9 @@ import io.vertigo.ai.bt.BTNode;
 import io.vertigo.ai.bt.BTStatus;
 import io.vertigo.core.util.StringUtil;
 
-public final class BotEngine {
+public class BotEngine {
 	private final Scanner sc = new Scanner(System.in);
-	private final BTBlackBoard bb = new BTBlackBoard();
+	protected final BTBlackBoard bb = new BTBlackBoard();
 
 	public BTNode set(final String keyTemplate, final int value) {
 		return set(keyTemplate, "" + value);
@@ -112,6 +112,32 @@ public final class BotEngine {
 			return BTStatus.Succeeded;
 		};
 	}
+
+	public BTNode confirm(final String key) {
+		return () -> {
+			final String response = answer("Press Enter to confirm value {{" + key + "}} or type the correct value");
+			if (response.isBlank()) {
+				return BTStatus.Succeeded;
+			}
+			bb.put(key, response);
+			return BTStatus.Succeeded;
+		};
+	}
+
+	public BTNode copy(final String sourceKey, final String targetKey) {
+		return () -> {
+			bb.put(targetKey, bb.get(sourceKey));
+			return BTStatus.Succeeded;
+		};
+	}
+
+	//	public BTNode move(final String sourceKey, final String targetKey) {
+	//		return () -> {
+	//			bb.put(targetKey, bb.get(sourceKey));
+	//			bb.clear(sourceKey);
+	//			return BTStatus.Succeeded;
+	//		};
+	//	}
 
 	@Override
 	public String toString() {
