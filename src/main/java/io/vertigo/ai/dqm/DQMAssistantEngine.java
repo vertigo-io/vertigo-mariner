@@ -11,14 +11,16 @@ public final class DQMAssistantEngine extends BotEngine {
 	private final DQMFormatter dqmFormatter = new DQMFormatter();
 
 	private BTNode testType(final String key, final BasicType basicType) {
-		return BTNode.sequence(() -> {
-			try {
-				dqmFormatter.stringToValue(bb.get(key), basicType);
-				return BTStatus.Succeeded;
-			} catch (final FormatterException e) {
-				return BTStatus.Failed;
-			}
-		}, set(key + "/type", basicType.name()));
+		return BTNode.sequence(
+				() -> {
+					try {
+						dqmFormatter.stringToValue(bb.get(key), basicType);
+						return BTStatus.Succeeded;
+					} catch (final FormatterException e) {
+						return BTStatus.Failed;
+					}
+				},
+				set(key + "/type", basicType.name()));
 
 	}
 

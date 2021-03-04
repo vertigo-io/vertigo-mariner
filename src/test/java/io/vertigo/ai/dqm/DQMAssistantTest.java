@@ -66,7 +66,7 @@ public class DQMAssistantTest {
 				state.copy("source/" + fieldName, "target/" + fieldName),
 				state.normalize("target/" + fieldName),
 				state.probeType("target/" + fieldName),
-				state.confirm("target/" + fieldName));
+				state.confirm("target/" + fieldName, "Press Enter to confirm value {{" + "target/" + fieldName + "}} or type the correct value"));
 	}
 
 	private static BTNode printState(final DQMAssistantEngine state) {

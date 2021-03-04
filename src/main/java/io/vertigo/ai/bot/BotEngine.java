@@ -13,7 +13,7 @@ import io.vertigo.core.util.StringUtil;
 
 public class BotEngine {
 	private final Scanner sc = new Scanner(System.in);
-	protected final BTBlackBoard bb = new BTBlackBoard();
+	public final BTBlackBoard bb = new BTBlackBoard();
 
 	public BTNode set(final String keyTemplate, final int value) {
 		return set(keyTemplate, "" + value);
@@ -22,6 +22,27 @@ public class BotEngine {
 	public BTNode set(final String keyTemplate, final String value) {
 		return () -> {
 			bb.put(bb.format(keyTemplate), value);
+			return BTStatus.Succeeded;
+		};
+	}
+
+	public BTNode inc(final String keyTemplate) {
+		return () -> {
+			bb.inc(bb.format(keyTemplate));
+			return BTStatus.Succeeded;
+		};
+	}
+
+	public BTNode clear(final String keyPattern) {
+		return () -> {
+			bb.clear(keyPattern);
+			return BTStatus.Succeeded;
+		};
+	}
+
+	public BTNode clearAll() {
+		return () -> {
+			bb.clearAll();
 			return BTStatus.Succeeded;
 		};
 	}
@@ -76,13 +97,6 @@ public class BotEngine {
 		};
 	}
 
-	public BTNode inc(final String keyTemplate) {
-		return () -> {
-			bb.inc(bb.format(keyTemplate));
-			return BTStatus.Succeeded;
-		};
-	}
-
 	public BTCondition eq(final String keyTemplate, final String compare) {
 		return BTNode.condition(() -> bb.eq(bb.format(keyTemplate), compare));
 	}
@@ -99,23 +113,9 @@ public class BotEngine {
 		return new BotSwitch(this, keyTemplate);
 	}
 
-	public BTNode clear(final String keyPattern) {
+	public BTNode confirm(final String key, final String confirmMsg) {
 		return () -> {
-			bb.clear(keyPattern);
-			return BTStatus.Succeeded;
-		};
-	}
-
-	public BTNode clearAll() {
-		return () -> {
-			bb.clearAll();
-			return BTStatus.Succeeded;
-		};
-	}
-
-	public BTNode confirm(final String key) {
-		return () -> {
-			final String response = answer("Press Enter to confirm value {{" + key + "}} or type the correct value");
+			final String response = answer(confirmMsg);
 			if (response.isBlank()) {
 				return BTStatus.Succeeded;
 			}
