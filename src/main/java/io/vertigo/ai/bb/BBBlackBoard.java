@@ -1,12 +1,13 @@
-package io.vertigo.ai.bt;
+package io.vertigo.ai.bb;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import io.vertigo.ai.bt.BTUtils;
 import io.vertigo.core.lang.Assertion;
 
-public final class BTBlackBoard {
+public final class BBBlackBoard {
 	private final Map<String, String> values = new LinkedHashMap<>();
 	private static final String REGEX = "[a-z]*(/[a-z0-9]*)*";
 
@@ -36,8 +37,9 @@ public final class BTBlackBoard {
 		checkKey(key);
 		//---
 		var s = get(key);
-		if (s == null)
+		if (s == null) {
 			s = "0";
+		}
 		final int value = Integer.valueOf(s).intValue() + 1;
 		put(key, "" + value);
 	}
@@ -72,7 +74,7 @@ public final class BTBlackBoard {
 			final var prefix = keyPattern.substring(0, keyPattern.length() - 2);
 			values.keySet().removeIf(s -> s.startsWith(prefix));
 		} else {
-			//This is not a pattern, just a key
+			//This is not a pattern, just a key with no * inside
 			final var key = keyPattern;
 			checkKey(key);
 			values.remove(key);

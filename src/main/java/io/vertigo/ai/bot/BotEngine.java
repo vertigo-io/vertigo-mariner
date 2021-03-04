@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.function.Predicate;
 
-import io.vertigo.ai.bt.BTBlackBoard;
+import io.vertigo.ai.bb.BBBlackBoard;
 import io.vertigo.ai.bt.BTCondition;
 import io.vertigo.ai.bt.BTNode;
 import io.vertigo.ai.bt.BTStatus;
@@ -13,10 +13,17 @@ import io.vertigo.core.util.StringUtil;
 
 public class BotEngine {
 	private final Scanner sc = new Scanner(System.in);
-	public final BTBlackBoard bb = new BTBlackBoard();
+	public final BBBlackBoard bb = new BBBlackBoard();
 
 	public BTNode set(final String keyTemplate, final int value) {
 		return set(keyTemplate, "" + value);
+	}
+
+	public BTNode copy(final String sourceKeyTemplate, final String targetKeyTemplate) {
+		return () -> {
+			bb.put(bb.format(sourceKeyTemplate), bb.get(bb.format(targetKeyTemplate)));
+			return BTStatus.Succeeded;
+		};
 	}
 
 	public BTNode set(final String keyTemplate, final String value) {
@@ -113,20 +120,13 @@ public class BotEngine {
 		return new BotSwitch(this, keyTemplate);
 	}
 
-	public BTNode confirm(final String key, final String confirmMsg) {
+	public BTNode confirm(final String keyTemplate, final String confirmMsg) {
 		return () -> {
 			final String response = answer(confirmMsg);
 			if (response.isBlank()) {
 				return BTStatus.Succeeded;
 			}
-			bb.put(key, response);
-			return BTStatus.Succeeded;
-		};
-	}
-
-	public BTNode copy(final String sourceKey, final String targetKey) {
-		return () -> {
-			bb.put(targetKey, bb.get(sourceKey));
+			bb.put(bb.format(keyTemplate), response);
 			return BTStatus.Succeeded;
 		};
 	}
