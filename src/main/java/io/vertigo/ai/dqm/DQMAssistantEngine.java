@@ -3,8 +3,10 @@ package io.vertigo.ai.dqm;
 import static io.vertigo.ai.bt.BTNode.sequence;
 
 import java.util.Map;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
+import io.vertigo.ai.bb.BBBlackBoard;
 import io.vertigo.ai.bot.BotEngine;
 import io.vertigo.ai.bt.BTNode;
 import io.vertigo.ai.bt.BTStatus;
@@ -65,6 +67,17 @@ public final class DQMAssistantEngine extends BotEngine {
 
 	public String read(final String key) {
 		return bb.get(key);
+	}
+
+	public BTNode invoke(final Function<BBBlackBoard, BTStatus> method) {
+		return () -> {
+			try {
+				return method.apply(bb);
+			} catch (final Exception e) {
+				return BTStatus.Failed;
+			}
+		};
+
 	}
 
 }
