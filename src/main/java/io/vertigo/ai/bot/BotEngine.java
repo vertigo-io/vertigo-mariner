@@ -21,7 +21,7 @@ public class BotEngine {
 
 	public BTNode copy(final String sourceKeyTemplate, final String targetKeyTemplate) {
 		return () -> {
-			bb.put(bb.format(sourceKeyTemplate), bb.get(bb.format(targetKeyTemplate)));
+			bb.put(bb.format(targetKeyTemplate), bb.get(bb.format(sourceKeyTemplate)));
 			return BTStatus.Succeeded;
 		};
 	}
@@ -76,13 +76,13 @@ public class BotEngine {
 		return BTNode.condition(() -> bb.get(bb.format(keyTemplate)) != null);
 	}
 
-	//2 args 
+	//2 args
 	public BTNode fulfill(final String keyTemplate, final String question) {
 		final Predicate<String> validator = t -> !StringUtil.isBlank(t);
 		return fulfill(keyTemplate, question, validator);
 	}
 
-	//3+ args 
+	//3+ args
 	public BTNode fulfill(final String keyTemplate, final String question, final String choice, final String... otherChoices) {
 		final List<String> choices = new ArrayList<>();
 		choices.add(choice);
