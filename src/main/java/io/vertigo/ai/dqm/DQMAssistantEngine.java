@@ -1,5 +1,10 @@
 package io.vertigo.ai.dqm;
 
+import static io.vertigo.ai.bt.BTNode.sequence;
+
+import java.util.Map;
+import java.util.function.Supplier;
+
 import io.vertigo.ai.bot.BotEngine;
 import io.vertigo.ai.bt.BTNode;
 import io.vertigo.ai.bt.BTStatus;
@@ -44,4 +49,22 @@ public final class DQMAssistantEngine extends BotEngine {
 			return BTStatus.Succeeded;
 		};
 	}
+
+	public BTNode injectData(final Supplier<Map<String, String>> dataSupplier) {
+		return () -> {
+			dataSupplier.get().forEach((key, value) -> bb.put("source/" + key, value));
+			return BTStatus.Succeeded;
+		};
+	}
+
+	public BTNode clearData() {
+		return sequence(
+				clear("source/*"),
+				clear("target/*"));
+	}
+
+	public String read(final String key) {
+		return bb.get(key);
+	}
+
 }

@@ -4,8 +4,6 @@ import static io.vertigo.ai.bt.BTNode.sequence;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Supplier;
 
 import org.junit.jupiter.api.Test;
 
@@ -24,40 +22,22 @@ public class DQMAssistantTest {
 				sequence(
 						state.inc("linenumber"), // setup
 						BTNode.loop(
+								BTNode.selector(
+										state.gt("linenumber", "" + contacts.size()),
+										BTNode.stop()),
+								state.injectData(() -> contacts.get(Integer.parseInt(state.read("linenumber")) - 1)),
 								sequence(
-										BTNode.selector(
-												state.gt("linenumber", "" + contacts.size()),
-												BTNode.stop()),
-										sequence(
-												injectData(() -> contacts.get(Integer.parseInt(state.bb.get("linenumber")) - 1), state),
-												handleLine(state),
-												clearData(state),
-												state.inc("linenumber")))))).run();
+										printState(state),
+										//---
+										properField(state, "lastname"),
+										properField(state, "firstname"),
+										properField(state, "birthdate"),
+										properField(state, "salary"),
+										//---
+										printState(state)),
+								state.clearData(),
+								state.inc("linenumber")))).run();
 
-	}
-
-	private static BTNode injectData(final Supplier<Map<String, String>> dataSupplier, final DQMAssistantEngine state) {
-		return () -> {
-			dataSupplier.get().forEach((key, value) -> state.bb.put("source/" + key, value));
-			return BTStatus.Succeeded;
-		};
-	}
-
-	private static BTNode clearData(final DQMAssistantEngine state) {
-		return sequence(
-				state.clear("source/*"),
-				state.clear("target/*"));
-	}
-
-	private static BTNode handleLine(final DQMAssistantEngine state) {
-		return sequence(
-				printState(state),
-				sequence(
-						properField(state, "lastname"),
-						properField(state, "firstname"),
-						properField(state, "birthdate"),
-						properField(state, "salary")),
-				printState(state));
 	}
 
 	private static BTNode properField(final DQMAssistantEngine state, final String fieldName) {
