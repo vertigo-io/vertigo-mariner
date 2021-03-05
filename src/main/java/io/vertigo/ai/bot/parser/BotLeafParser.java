@@ -69,7 +69,7 @@ final class BotLeafParser {
 			case clearAll:
 				Assertion.check().isTrue(args.size() == 0, "args must have no element with clearAll command");
 				//---
-				return botEngine.clearAll();
+				return botEngine.clear();
 			case set: {
 				Assertion.check().isTrue(args.size() == 2, "args must have exactly 2 elements with set command");
 				//---

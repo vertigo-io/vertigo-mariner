@@ -47,9 +47,9 @@ public class BotEngine {
 		};
 	}
 
-	public BTNode clearAll() {
+	public BTNode clear() {
 		return () -> {
-			bb.clearAll();
+			bb.clear();
 			return BTStatus.Succeeded;
 		};
 	}

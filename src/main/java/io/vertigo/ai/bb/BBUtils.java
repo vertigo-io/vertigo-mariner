@@ -7,7 +7,7 @@ import io.vertigo.core.lang.Assertion;
 final class BBUtils {
 	public static String format(final String msg, final Map<String, String> map) {
 		Assertion.check()
-				.isNotBlank(msg)
+				.isNotNull(msg)
 				.isNotNull(map);
 		//---
 		final String START_TOKEN = "{{";
