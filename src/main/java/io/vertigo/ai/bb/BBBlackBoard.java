@@ -4,7 +4,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import io.vertigo.ai.bt.BTUtils;
 import io.vertigo.core.lang.Assertion;
 
 public final class BBBlackBoard {
@@ -30,7 +29,7 @@ public final class BBBlackBoard {
 	}
 
 	public String format(final String msg) {
-		return BTUtils.format(msg, values);
+		return BBUtils.format(msg, values);
 	}
 
 	public void inc(final String key) {

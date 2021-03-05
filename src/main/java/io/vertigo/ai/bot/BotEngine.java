@@ -16,7 +16,7 @@ public class BotEngine {
 	public final BBBlackBoard bb = new BBBlackBoard();
 
 	public BTNode set(final String keyTemplate, final int value) {
-		return set(keyTemplate, "" + value);
+		return set(keyTemplate, String.valueOf(value));
 	}
 
 	public BTNode copy(final String sourceKeyTemplate, final String targetKeyTemplate) {

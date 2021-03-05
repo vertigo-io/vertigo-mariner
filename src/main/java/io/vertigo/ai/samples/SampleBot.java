@@ -7,7 +7,6 @@ import static io.vertigo.ai.bt.BTNode.sequence;
 import io.vertigo.ai.bot.BotEngine;
 import io.vertigo.ai.bt.BTNode;
 import io.vertigo.ai.bt.BTRoot;
-import io.vertigo.ai.bt.BTUtils;
 
 public class SampleBot {
 	private final BotEngine botEngine;

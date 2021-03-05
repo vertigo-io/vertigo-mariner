@@ -1,22 +1,10 @@
-package io.vertigo.ai.bt;
+package io.vertigo.ai.bb;
 
 import java.util.Map;
-import java.util.function.Predicate;
 
 import io.vertigo.core.lang.Assertion;
 
-public final class BTUtils {
-	public static Predicate<String> isInteger() {
-		return s -> {
-			try {
-				Integer.parseInt(s);
-				return true;
-			} catch (final Exception e) {
-				return false;
-			}
-		};
-	}
-
+final class BBUtils {
 	public static String format(final String msg, final Map<String, String> map) {
 		Assertion.check()
 				.isNotBlank(msg)
