@@ -14,22 +14,22 @@ public class BotParserTest {
 		final var lines = List.of(
 				"inc mem/0",
 				"inc mem/1",
-				"display {{mem/0}}_{{mem/1}}",
+				"display '{{mem/0}} {{mem/1}}'",
 				"clear mem/*",
 				"inc mem/0",
 				"inc mem/1",
-				"display {{mem/0}}_{{mem/1}}",
+				"display '{{mem/0}} {{mem/1}}'",
 				"inc mem/0",
 				"inc mem/0",
 				"inc mem/0",
 				"clear mem/0",
 				"inc mem/0",
 				"inc mem/1",
-				"display {{mem/0}}_{{mem/1}}",
+				"display '{{mem/0}} {{mem/1}}'",
 				"clearAll",
 				"set mem/0 9",
 				"inc mem/1",
-				"display {{mem/0}}_{{mem/1}}");
+				"display '{{mem/0}} {{mem/1}}'");
 		BotParser.parse(lines);
 		final var root = new BTRoot(BotParser.parse(lines));
 		root.run();
@@ -38,9 +38,9 @@ public class BotParserTest {
 	@Test
 	public void test1() {
 		final var lines = List.of(
-				"display I_m_Alan",
-				"fulfill u/name hello_what_is_your_name_?",
-				"display welcome_{{u/name}},nice_to_see_you");
+				"display \"I'm Alan\"",
+				"fulfill u/name 'hello what is your name ?'",
+				"display 'welcome {{u/name}},nice to see you'");
 		BotParser.parse(lines);
 		final var root = new BTRoot(BotParser.parse(lines));
 		root.run();
@@ -49,7 +49,7 @@ public class BotParserTest {
 	@Test
 	public void test2() {
 		final var lines = List.of(
-				"fulfill mem A_B_C? A B C",
+				"fulfill mem 'A B C?' A B C",
 				"selector",
 				"  sequence",
 				"    eq mem A",
