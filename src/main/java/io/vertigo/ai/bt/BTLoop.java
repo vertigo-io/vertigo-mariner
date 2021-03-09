@@ -33,19 +33,21 @@ final class BTLoop implements BTNode {
 		for (int i = 0; i < MAX_LOOPS; i++) {
 			final var whileTest = whileCondition.eval();
 			//breaks the loop when the while condition failed
-			if (whileTest.isFailed())
+			if (whileTest.isFailed()) {
 				return BTStatus.Succeeded;
+			}
 
 			final var status = node.eval();
-			//loops when succeeded until a fail or a stop
+			//loops when succeeded until failure or a running task
 			if (!status.isSucceeded()) {
 				return status;
 			}
 
 			final var untilTest = untilCondition.eval();
 			//breaks the loop when the until condition succeeded
-			if (untilTest.isSucceeded())
+			if (untilTest.isSucceeded()) {
 				return BTStatus.Succeeded;
+			}
 		}
 		return BTStatus.Failed;
 	}
