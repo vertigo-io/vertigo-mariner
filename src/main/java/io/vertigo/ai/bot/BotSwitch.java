@@ -8,6 +8,7 @@ import java.util.List;
 
 import io.vertigo.ai.bt.BTCondition;
 import io.vertigo.ai.bt.BTNode;
+import io.vertigo.ai.bt.BTNodes;
 import io.vertigo.core.lang.Assertion;
 import io.vertigo.core.lang.Builder;
 
@@ -35,8 +36,9 @@ public final class BotSwitch implements Builder<BTNode> {
 
 	public BotSwitch when(final String compare, final List<BTNode> nodes) {
 		selectorNodes.add(
-				sequence(nodes)
-						.guardedBy(buildGuard(compare)));
+				BTNodes.guard(
+						sequence(nodes),
+						buildGuard(compare)));
 		return this;
 	}
 

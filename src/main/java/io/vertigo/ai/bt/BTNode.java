@@ -1,9 +1,5 @@
 package io.vertigo.ai.bt;
 
-import java.util.List;
-
-import io.vertigo.core.lang.Assertion;
-
 /**
  * BT are composed of nodes 'BTNode' with a single root 'BTRoot' 
  * This nodes are memory less, they don't store data.
@@ -34,16 +30,9 @@ import io.vertigo.core.lang.Assertion;
  */
 @FunctionalInterface
 public interface BTNode {
+	/**
+	 * The core of the BT.
+	 * @return status after the node evaluation
+	 */
 	BTStatus eval();
-
-	default BTNode guardedBy(final BTCondition... conditions) {
-		return guardedBy(List.of(conditions));
-	}
-
-	default BTNode guardedBy(final List<BTCondition> conditions) {
-		Assertion.check()
-				.isNotNull(conditions);
-		//---
-		return BTNodes.sequence(BTNodes.sequence(conditions), this);
-	}
 }

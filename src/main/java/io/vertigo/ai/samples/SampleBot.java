@@ -1,5 +1,6 @@
 package io.vertigo.ai.samples;
 
+import static io.vertigo.ai.bt.BTNodes.guard;
 import static io.vertigo.ai.bt.BTNodes.loop;
 import static io.vertigo.ai.bt.BTNodes.loopUntil;
 import static io.vertigo.ai.bt.BTNodes.selector;
@@ -94,10 +95,12 @@ public class SampleBot {
 						botEngine.fulfill("g/choice", "What is your choice ?"),
 						botEngine.inc("g/rounds"),
 						selector(
-								botEngine.display("select down !")
-										.guardedBy(botEngine.gt("g/target", "{{g/choice}}")),
-								botEngine.display("select up !")
-										.guardedBy(botEngine.lt("g/target", "{{g/choice}}")),
+								guard(
+										botEngine.display("select down !"),
+										botEngine.gt("g/target", "{{g/choice}}")),
+								guard(
+										botEngine.display("select up !"),
+										botEngine.lt("g/target", "{{g/choice}}")),
 								succeed())),
 				botEngine.display("Bravo {{u/name}} you have found the right number {{g/target}} in {{g/rounds}} rounds"));
 	}

@@ -23,10 +23,11 @@ public final class BTNodes {
 	}
 
 	public static BTNode sequence(final List<? extends BTNode> nodes) {
-		Assertion.check().isNotNull(nodes);
+		Assertion.check()
+				.isNotNull(nodes);
 		//---
 		return nodes.size() == 1
-				? nodes.get(0)
+				? nodes.get(0) // A sequence of one element is equivalent to the element
 				: new BTSequence(nodes);
 	}
 
@@ -42,7 +43,23 @@ public final class BTNodes {
 	}
 
 	public static BTNode selector(final List<? extends BTNode> nodes) {
-		return new BTSelector(nodes);
+		Assertion.check()
+				.isNotNull(nodes);
+		//---
+		return nodes.size() == 1
+				? nodes.get(0) // A selector of one element is equivalent to the element
+				: new BTSelector(nodes);
+	}
+
+	public static BTNode guard(final BTNode node, final BTCondition... conditions) {
+		return guard(node, List.of(conditions));
+	}
+
+	public static BTNode guard(final BTNode node, final List<BTCondition> conditions) {
+		Assertion.check()
+				.isNotNull(node);
+		//---
+		return sequence(sequence(conditions), node);
 	}
 
 	public static BTNode doTry(final int tries, final BTNode... nodes) {
