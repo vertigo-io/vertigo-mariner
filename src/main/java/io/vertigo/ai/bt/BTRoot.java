@@ -2,6 +2,11 @@ package io.vertigo.ai.bt;
 
 import io.vertigo.core.lang.Assertion;
 
+/**
+ * The root of an effective tree. 
+ * 
+ * @author pchretien
+ */
 public final class BTRoot {
 	private final BTNode rootNode;
 

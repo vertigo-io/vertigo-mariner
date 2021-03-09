@@ -2,6 +2,13 @@ package io.vertigo.ai.bt;
 
 import io.vertigo.core.lang.Assertion;
 
+/**
+ * Loop permits to repeat a node or a sequence of nodes
+ *  - while a specific condition is met 
+ *  - until a specific condition is met
+ * 
+ * @author pchretien
+ */
 final class BTLoop implements BTNode {
 	/* This is a security to break the loop if the condition is never attempted */
 	static final int MAX_LOOPS = 10_000;

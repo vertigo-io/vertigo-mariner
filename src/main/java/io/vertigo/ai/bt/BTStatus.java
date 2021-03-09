@@ -1,5 +1,10 @@
 package io.vertigo.ai.bt;
 
+/**
+ * The status returned after a node has been evaluated.
+ * 
+ * @author pchretien
+ */
 public enum BTStatus {
 	Succeeded,
 	Stopped,

@@ -4,6 +4,15 @@ import java.util.List;
 
 import io.vertigo.core.lang.Assertion;
 
+/**
+ * One of the two most important composite node with the sequence.
+ * 
+ * A selector is composed of many nodes.
+ * It succeeds when the first node succeeds.
+ * A selector fails when all the nodes fail
+ * 
+ * @author pchretien
+ */
 final class BTSelector implements BTNode {
 	private final List<BTNode> nodes;
 

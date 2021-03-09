@@ -4,6 +4,17 @@ import java.util.function.Supplier;
 
 import io.vertigo.core.lang.Assertion;
 
+/**
+ * A condition is a special node that returns a status 
+ * - Succeeded
+ * or 
+ * - Failed 
+ *  
+ *  A condition must be evaluated very quickly.  
+ *  If not it's a task !
+ *  
+ * @author pchretien
+ */
 public final class BTCondition implements BTNode {
 	private final Supplier<Boolean> test;
 	static final BTCondition SUCCEED = new BTCondition(() -> true);
