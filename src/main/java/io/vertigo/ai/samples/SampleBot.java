@@ -1,8 +1,11 @@
 package io.vertigo.ai.samples;
 
-import static io.vertigo.ai.bt.BTNode.loopUntil;
-import static io.vertigo.ai.bt.BTNode.selector;
-import static io.vertigo.ai.bt.BTNode.sequence;
+import static io.vertigo.ai.bt.BTNodes.loop;
+import static io.vertigo.ai.bt.BTNodes.loopUntil;
+import static io.vertigo.ai.bt.BTNodes.selector;
+import static io.vertigo.ai.bt.BTNodes.sequence;
+import static io.vertigo.ai.bt.BTNodes.stop;
+import static io.vertigo.ai.bt.BTNodes.succeed;
 
 import io.vertigo.ai.bot.BotEngine;
 import io.vertigo.ai.bt.BTNode;
@@ -18,7 +21,7 @@ public class SampleBot {
 
 	public SampleBot() {
 		this.botEngine = new BotEngine();
-		root = new BTRoot(BTNode.loop(main()));
+		root = new BTRoot(loop(main()));
 	}
 
 	public void run() {
@@ -32,7 +35,7 @@ public class SampleBot {
 				botEngine.doSwitch("i/name")
 						.when("X",
 								botEngine.display("bye bye {{u/name}}"),
-								BTNode.stop())
+								stop())
 						.whenOther(
 								dispatch(),
 								rate())
@@ -95,7 +98,7 @@ public class SampleBot {
 										.guardedBy(botEngine.gt("g/target", "{{g/choice}}")),
 								botEngine.display("select up !")
 										.guardedBy(botEngine.lt("g/target", "{{g/choice}}")),
-								BTNode.succeed())),
+								succeed())),
 				botEngine.display("Bravo {{u/name}} you have found the right number {{g/target}} in {{g/rounds}} rounds"));
 	}
 

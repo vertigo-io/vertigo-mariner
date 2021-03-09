@@ -1,5 +1,9 @@
 package io.vertigo.ai.bot;
 
+import static io.vertigo.ai.bt.BTNodes.condition;
+import static io.vertigo.ai.bt.BTNodes.doTry;
+import static io.vertigo.ai.bt.BTNodes.selector;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -61,7 +65,7 @@ public class BotEngine {
 	}
 
 	private BTNode query(final String keyTemplate, final String question, final Predicate<String> validator) {
-		return BTNode.doTry(3, () -> {
+		return doTry(3, () -> {
 			final String response = answer(question);
 			if (validator.test(response)) {
 				bb.put(bb.format(keyTemplate), response);
@@ -73,7 +77,7 @@ public class BotEngine {
 	}
 
 	public BTCondition isFulFilled(final String keyTemplate) {
-		return BTNode.condition(() -> bb.get(bb.format(keyTemplate)) != null);
+		return condition(() -> bb.get(bb.format(keyTemplate)) != null);
 	}
 
 	//2 args
@@ -92,7 +96,7 @@ public class BotEngine {
 	}
 
 	public BTNode fulfill(final String keyTemplate, final String question, final Predicate<String> validator) {
-		return BTNode.selector(
+		return selector(
 				isFulFilled(keyTemplate),
 				query(keyTemplate, question, validator));
 	}
@@ -105,15 +109,15 @@ public class BotEngine {
 	}
 
 	public BTCondition eq(final String keyTemplate, final String compare) {
-		return BTNode.condition(() -> bb.eq(bb.format(keyTemplate), compare));
+		return condition(() -> bb.eq(bb.format(keyTemplate), compare));
 	}
 
 	public BTCondition gt(final String keyTemplate, final String compare) {
-		return BTNode.condition(() -> bb.gt(bb.format(keyTemplate), compare));
+		return condition(() -> bb.gt(bb.format(keyTemplate), compare));
 	}
 
 	public BTCondition lt(final String keyTemplate, final String compare) {
-		return BTNode.condition(() -> bb.lt(bb.format(keyTemplate), compare));
+		return condition(() -> bb.lt(bb.format(keyTemplate), compare));
 	}
 
 	public BotSwitch doSwitch(final String keyTemplate) {

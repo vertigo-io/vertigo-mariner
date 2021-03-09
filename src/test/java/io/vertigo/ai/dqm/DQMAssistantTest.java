@@ -1,6 +1,9 @@
 package io.vertigo.ai.dqm;
 
-import static io.vertigo.ai.bt.BTNode.sequence;
+import static io.vertigo.ai.bt.BTNodes.loop;
+import static io.vertigo.ai.bt.BTNodes.selector;
+import static io.vertigo.ai.bt.BTNodes.sequence;
+import static io.vertigo.ai.bt.BTNodes.stop;
 
 import javax.inject.Inject;
 
@@ -37,10 +40,10 @@ public class DQMAssistantTest {
 			new BTRoot(
 					sequence(
 							dqmEngine.invoke(contactServices::init),
-							BTNode.loop(
-									BTNode.selector(
+							loop(
+									selector(
 											dqmEngine.invoke(contactServices::shouldContinue),
-											BTNode.stop()),
+											stop()),
 									dqmEngine.invoke(contactServices::doBefore),
 									sequence(
 											printState(dqmEngine),

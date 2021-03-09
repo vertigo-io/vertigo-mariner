@@ -1,5 +1,8 @@
 package io.vertigo.ai.bot.parser;
 
+import static io.vertigo.ai.bt.BTNodes.selector;
+import static io.vertigo.ai.bt.BTNodes.sequence;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,9 +78,9 @@ public final class BotCompositeBuilder implements Builder<BTNode> {
 	private BTNode createComposite() {
 		switch (compositeCommand) {
 			case selector:
-				return BTNode.selector(nodes);
+				return selector(nodes);
 			case sequence:
-				return BTNode.sequence(nodes);
+				return sequence(nodes);
 			case end:
 			default:
 				throw new IllegalStateException();

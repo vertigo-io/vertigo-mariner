@@ -1,5 +1,8 @@
 package io.vertigo.ai.bot.parser;
 
+import static io.vertigo.ai.bt.BTNodes.fail;
+import static io.vertigo.ai.bt.BTNodes.succeed;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -113,12 +116,12 @@ final class BotLeafParser {
 			case succeed: {
 				Assertion.check().isTrue(args.size() == 0, "args must have no element with succeed command");
 				//---
-				return BTNode.succeed();
+				return succeed();
 			}
 			case fail: {
 				Assertion.check().isTrue(args.size() == 0, "args must have no element with fail command");
 				//---
-				return BTNode.fail();
+				return fail();
 			}
 			default:
 				throw new IllegalStateException();

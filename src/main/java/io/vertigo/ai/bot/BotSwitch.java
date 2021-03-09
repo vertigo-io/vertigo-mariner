@@ -1,7 +1,7 @@
 package io.vertigo.ai.bot;
 
-import static io.vertigo.ai.bt.BTNode.selector;
-import static io.vertigo.ai.bt.BTNode.sequence;
+import static io.vertigo.ai.bt.BTNodes.selector;
+import static io.vertigo.ai.bt.BTNodes.sequence;
 
 import java.util.ArrayList;
 import java.util.List;

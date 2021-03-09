@@ -1,6 +1,7 @@
 package io.vertigo.ai.dqm;
 
-import static io.vertigo.ai.bt.BTNode.sequence;
+import static io.vertigo.ai.bt.BTNodes.selector;
+import static io.vertigo.ai.bt.BTNodes.sequence;
 
 import java.util.Map;
 import java.util.function.Function;
@@ -18,7 +19,7 @@ public final class DQMAssistantEngine extends BotEngine {
 	private final DQMFormatter dqmFormatter = new DQMFormatter();
 
 	private BTNode testType(final String key, final BasicType basicType) {
-		return BTNode.sequence(
+		return sequence(
 				() -> {
 					try {
 						dqmFormatter.stringToValue(bb.get(key), basicType);
@@ -32,7 +33,7 @@ public final class DQMAssistantEngine extends BotEngine {
 	}
 
 	public BTNode probeType(final String key) {
-		return BTNode.selector(
+		return selector(
 				testType(key, BasicType.Integer),
 				testType(key, BasicType.Long),
 				testType(key, BasicType.Double),
