@@ -8,8 +8,10 @@ import io.vertigo.core.lang.Assertion;
  * One of the two most important composite node with the sequence.
  * 
  * A selector is composed of many nodes.
- * It succeeds when the first node succeeds.
- * A selector fails when all the nodes fail
+ * It succeeds when only one node succeeds.
+ * After this success the other nodes are not evaluated.
+ * 
+ * A selector fails when all the nodes fail.
  * 
  * @author pchretien
  */

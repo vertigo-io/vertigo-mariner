@@ -115,11 +115,6 @@ public final class BTNodes {
 		return BTCondition.FAIL;
 	}
 
-	public static BTNode stop() {
-		//Stop is not a condition !
-		return () -> BTStatus.Stopped;
-	}
-
 	/**
 	 * Decorator 
 	 * This method is useful to build a node that returns a different status that its input.

@@ -1,16 +1,16 @@
 package io.vertigo.ai.samples;
 
 import static io.vertigo.ai.bt.BTNodes.guard;
-import static io.vertigo.ai.bt.BTNodes.loop;
 import static io.vertigo.ai.bt.BTNodes.loopUntil;
 import static io.vertigo.ai.bt.BTNodes.selector;
 import static io.vertigo.ai.bt.BTNodes.sequence;
-import static io.vertigo.ai.bt.BTNodes.stop;
 import static io.vertigo.ai.bt.BTNodes.succeed;
 
 import io.vertigo.ai.bot.BotEngine;
 import io.vertigo.ai.bt.BTNode;
+import io.vertigo.ai.bt.BTNodes;
 import io.vertigo.ai.bt.BTRoot;
+import io.vertigo.ai.bt.BTStatus;
 
 public class SampleBot {
 	private final BotEngine botEngine;
@@ -22,7 +22,13 @@ public class SampleBot {
 
 	public SampleBot() {
 		this.botEngine = new BotEngine();
-		root = new BTRoot(loop(main()));
+		root = new BTRoot(
+				sequence(
+						botEngine.fulfill("u/name", "Hello I'm Alan what is your name ?"),
+						//intents
+						BTNodes.transform(main(), BTStatus.Succeeded),
+						//anyway we stay polite
+						botEngine.display("bye bye {{u/name}}")));
 	}
 
 	public void run() {
@@ -30,35 +36,16 @@ public class SampleBot {
 	}
 
 	private BTNode main() {
-		return sequence(
-				botEngine.fulfill("u/name", "Hello I'm Alan what is your name ?"),
+		return loopUntil(botEngine.eq("i/name", "X"),
 				botEngine.fulfill("i/name", "Hi {{u/name}} please select [W]eather, [T]icket, [G]ame or e[X]it ?", "W", "G", "T", "X"),
 				botEngine.doSwitch("i/name")
-						.when("X",
-								botEngine.display("bye bye {{u/name}}"),
-								stop())
-						.whenOther(
-								dispatch(),
-								rate())
+						.when("W", weather())
+						.when("G", game())
+						.when("T", ticket())
 						.build(),
+				rate(),
 				botEngine.clear("i/*"),
 				botEngine.clear("rate/*"));
-	}
-
-	private BTNode dispatch() {
-		return botEngine.doSwitch("i/name")
-				.when("W", weather())
-				.when("G", game())
-				.when("T", ticket())
-				.build();
-
-		//		return  selector(
-		//				weather(bTChat)
-		//						.guardedBy(bTChat.eq("i/name", "W")),
-		//				game(bTChat)
-		//						.guardedBy(bTChat.eq("i/name", "G")),
-		//				ticket(bTChat)
-		//						.guardedBy(bTChat.eq("i/name", "T")));
 	}
 
 	private BTNode weather() {

@@ -7,7 +7,7 @@ package io.vertigo.ai.bt;
  */
 public enum BTStatus {
 	Succeeded,
-	Stopped,
+	Running,
 	Failed;
 
 	public boolean isFailed() {
@@ -18,7 +18,7 @@ public enum BTStatus {
 		return this == Succeeded;
 	}
 
-	public boolean isStopped() {
-		return this == Stopped;
+	public boolean isRunning() {
+		return this == Running;
 	}
 }
