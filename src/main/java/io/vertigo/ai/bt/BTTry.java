@@ -26,7 +26,7 @@ final class BTTry implements BTNode {
 	public BTStatus eval() {
 		for (int i = 0; i < tries; i++) {
 			final var status = node.eval();
-			//loops until succeeded or stopped
+			//loops until succeeded or running
 			if (status.isSucceeded() || status.isRunning()) {
 				return status;
 			}

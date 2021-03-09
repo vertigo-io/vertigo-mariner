@@ -5,16 +5,17 @@ package io.vertigo.ai.bt;
  * This nodes are memory less, they don't store data.
  * 
  * a BTNode have only one method called eval()
- * this method returns a status 'BTStatus' which contains the following states :
+ * this method returns a status 'BTStatus', 
+ * which contains the following states :
  *  - Failed
  *  - Succeeded
- *  - Stopped
+ *  - Running
  * 
- * Nodes are splitted into two categories
+ * Nodes are split into two categories
  *  - Leaves 
  *  - Composites
  * 
- * Composite are composed from one to many other nodes 
+ * Composites are composed from one to many other nodes 
  * They control the flow 
  *  - Sequence 
  *  - Selector
@@ -22,7 +23,7 @@ package io.vertigo.ai.bt;
  *  - Loop (a repeatable sequence)
  *  - Try 
  * 
- * Leaves are themselves splitted into
+ * Leaves are themselves split into
  *  - Conditions 
  *  - Tasks
  *   

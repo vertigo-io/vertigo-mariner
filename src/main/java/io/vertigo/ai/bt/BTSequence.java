@@ -28,7 +28,7 @@ final class BTSequence implements BTNode {
 	public BTStatus eval() {
 		for (final BTNode node : nodes) {
 			final var status = node.eval();
-			//continue when succeeded until a fail or a stop
+			//continue when succeeded until a failure or a running task
 			if (!status.isSucceeded()) {
 				return status;
 			}

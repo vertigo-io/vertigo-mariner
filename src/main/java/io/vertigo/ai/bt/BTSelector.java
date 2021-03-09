@@ -29,7 +29,7 @@ final class BTSelector implements BTNode {
 	public BTStatus eval() {
 		for (final BTNode node : nodes) {
 			final var status = node.eval();
-			//continue when failed until a success or a stop
+			//continue on failure until success or a running task
 			if (!status.isFailed()) {
 				return status;
 			}
