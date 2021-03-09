@@ -5,7 +5,7 @@ import java.util.Map;
 import io.vertigo.core.lang.Assertion;
 
 final class BBUtils {
-	public static String format(final String msg, final Map<String, String> map) {
+	static String format(final String msg, final Map<String, String> map) {
 		Assertion.check()
 				.isNotNull(msg)
 				.isNotNull(map);
