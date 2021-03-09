@@ -1,5 +1,8 @@
 package io.vertigo.ai.bot;
 
+import static io.vertigo.ai.bt.BTNode.selector;
+import static io.vertigo.ai.bt.BTNode.sequence;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +35,7 @@ public final class BotSwitch implements Builder<BTNode> {
 
 	public BotSwitch when(final String compare, final List<BTNode> nodes) {
 		selectorNodes.add(
-				BTNode.sequence(nodes)
+				sequence(nodes)
 						.guardedBy(buildGuard(compare)));
 		return this;
 	}
@@ -43,12 +46,12 @@ public final class BotSwitch implements Builder<BTNode> {
 
 	public BotSwitch whenOther(final List<BTNode> nodes) {
 		selectorNodes.add(
-				BTNode.sequence(nodes));
+				sequence(nodes));
 		return this;
 	}
 
 	@Override
 	public BTNode build() {
-		return BTNode.selector(selectorNodes);
+		return selector(selectorNodes);
 	}
 }
