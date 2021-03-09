@@ -1,6 +1,7 @@
 package io.vertigo.ai.bt;
 
 import java.util.List;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 import io.vertigo.core.lang.Assertion;
@@ -117,5 +118,30 @@ public final class BTNodes {
 	public static BTNode stop() {
 		//Stop is not a condition !
 		return () -> BTStatus.Stopped;
+	}
+
+	/**
+	 * Decorator 
+	 * This method is useful to build a node that returns a different status that its input.
+	 * For example : it can failed when it succeeds !
+	 * 
+	 * @param node the node to decorate
+	 * @param transformer the function that changes the status
+	 * @return the decorated node
+	 */
+	public static BTNode transform(final BTNode node, final Function<BTStatus, BTStatus> transformer) {
+		return new BTDecorator(node, transformer);
+	}
+
+	/**
+	 * Decorator 
+	 * This method is useful to build an 'always succeed' node for example.
+	 * 
+	 * @param node the node to decorate
+	 * @param status the targeted status
+	 * @return the decorated node
+	 */
+	public static BTNode transform(final BTNode node, final BTStatus status) {
+		return new BTDecorator(node, anyStatus -> status);
 	}
 }
