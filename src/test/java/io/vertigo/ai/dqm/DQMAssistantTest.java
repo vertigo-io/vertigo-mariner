@@ -62,7 +62,7 @@ public class DQMAssistantTest {
 
 	private static BTNode properField(final DQMAssistantEngine dqmEngine, final String fieldName) {
 		return sequence(
-				dqmEngine.fulfillNX("source/" + fieldName, fieldName),
+				dqmEngine.fulfill("source/" + fieldName, fieldName),
 				dqmEngine.copy("source/" + fieldName, "target/" + fieldName),
 				dqmEngine.normalize("target/" + fieldName),
 				dqmEngine.probeType("target/" + fieldName),

@@ -22,7 +22,7 @@ public class SampleBot {
 		this.botEngine = new BotEngine();
 		root = new BTRoot(
 				sequence(
-						botEngine.fulfillNX("u/name", "Hello I'm Alan what is your name ?"),
+						botEngine.fulfill("u/name", "Hello I'm Alan what is your name ?"),
 						//intents
 						main(),
 						//anyway we stay polite
@@ -35,20 +35,21 @@ public class SampleBot {
 
 	private BTNode main() {
 		return loopUntil(botEngine.eq("i/name", "X"),
+				botEngine.clear("i/*"),
+				botEngine.clear("rate/*"),
 				botEngine.fulfill("i/name", "Hi {{u/name}} please select [W]eather, [T]icket, [G]ame or e[X]it ?", "W", "G", "T", "X"),
 				botEngine.doSwitch("i/name")
 						.when("W", weather())
 						.when("G", game())
 						.when("T", ticket())
+						.when("X", succeed())
 						.build(),
-				rate(),
-				botEngine.clear("i/*"),
-				botEngine.clear("rate/*"));
+				rate());
 	}
 
 	private BTNode weather() {
 		return sequence(
-				botEngine.fulfillNX("w/city", "Please choose a city"),
+				botEngine.fulfill("w/city", "Please choose a city"),
 				botEngine.display("It's sunny in {{w/city}} !"),
 				botEngine.clear("w/*"));
 	}
@@ -56,14 +57,14 @@ public class SampleBot {
 	private BTNode ticket() {
 		return sequence(
 				botEngine.display("You have chosen to book a ticket, I have some questions..."),
-				botEngine.fulfillNX("t/return", "Do you want a return ticket  ? Y/N", "Y", "N"),
-				botEngine.fulfillNX("t/from", "from ?"),
-				botEngine.fulfillNX("t/to", "to ?"),
-				botEngine.fulfillNX("t/count", "How many tickets ?",
+				botEngine.fulfill("t/return", "Do you want a return ticket  ? Y/N", "Y", "N"),
+				botEngine.fulfill("t/from", "from ?"),
+				botEngine.fulfill("t/to", "to ?"),
+				botEngine.fulfill("t/count", "How many tickets ?",
 						BTUtils.isInteger().and(s -> Integer.valueOf(s) > 0 && Integer.valueOf(s) < 10)),
 				loopUntil(botEngine.eq("t/idx", "{{t/count}}"),
 						botEngine.inc("t/idx"),
-						botEngine.fulfillNX("t/{{t/idx}}/name", "What is the name of the {{t/idx}} person ?"),
+						botEngine.fulfill("t/{{t/idx}}/name", "What is the name of the {{t/idx}} person ?"),
 						botEngine.display("The ticket {{t/idx}} is booked for {{t/{{t/idx}}/name}}")),
 				botEngine.display("Thank you, your ticket from {{t/from}} to {{t/to}} for {{t/count}} persons will be sent..."),
 				botEngine.clear("t/*"));
@@ -77,7 +78,7 @@ public class SampleBot {
 						Double.valueOf(Math.floor(Math.random() * 101)).intValue()),
 				loopUntil(botEngine.eq("g/target", "{{g/choice}}"),
 						botEngine.clear("g/choice"),
-						botEngine.fulfillNX("g/choice", "What is your choice ?"),
+						botEngine.fulfill("g/choice", "What is your choice ?"),
 						botEngine.inc("g/rounds"),
 						selector(
 								guard(
@@ -92,7 +93,7 @@ public class SampleBot {
 
 	private BTNode rate() {
 		return sequence(
-				botEngine.fulfillNX("rate/rating", "Please rate the response [0, 1, 2, 3, 4, 5]", "0", "1", "2", "3", "4", "5"),
+				botEngine.fulfill("rate/rating", "Please rate the response [0, 1, 2, 3, 4, 5]", "0", "1", "2", "3", "4", "5"),
 				botEngine.display("You have rated {{rate/rating}}"));
 	}
 }

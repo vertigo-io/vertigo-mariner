@@ -64,13 +64,13 @@ public class BotEngine {
 		return sc.nextLine();
 	}
 
-	public BTNode fulfillNX(final String keyTemplate, final String question, final Predicate<String> validator) {
+	public BTNode fulfill(final String keyTemplate, final String question, final Predicate<String> validator) {
 		return selector(
 				isFulFilled(keyTemplate),
-				fulfill(keyTemplate, question, validator));
+				query(keyTemplate, question, validator));
 	}
 
-	public BTNode fulfill(final String keyTemplate, final String question, final Predicate<String> validator) {
+	private BTNode query(final String keyTemplate, final String question, final Predicate<String> validator) {
 		return doTry(3, () -> {
 			final String response = answer(question);
 			if (validator.test(response)) {
@@ -92,22 +92,11 @@ public class BotEngine {
 		return fulfill(keyTemplate, question, validator);
 	}
 
-	//2 args
-	public BTNode fulfillNX(final String keyTemplate, final String question) {
-		final Predicate<String> validator = t -> !StringUtil.isBlank(t);
-		return fulfillNX(keyTemplate, question, validator);
-	}
-
 	private static Predicate<String> buildChoices(final String choice, final String... otherChoices) {
 		final List<String> choices = new ArrayList<>();
 		choices.add(choice);
 		choices.addAll(List.of(otherChoices));
 		return t -> choices.contains(t);
-	}
-
-	//3+ args
-	public BTNode fulfillNX(final String keyTemplate, final String question, final String choice, final String... otherChoices) {
-		return fulfillNX(keyTemplate, question, buildChoices(choice, otherChoices));
 	}
 
 	//3+ args
