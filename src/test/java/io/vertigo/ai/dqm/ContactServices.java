@@ -19,8 +19,8 @@ public class ContactServices implements Component {
 		return BTStatus.Succeeded;
 	}
 
-	public final BTStatus shouldContinue(final BBBlackBoard bb) {
-		return Integer.parseInt(bb.get("linenumber")) <= fakeContacts.size() ? BTStatus.Succeeded : BTStatus.Failed;
+	public final boolean shouldContinue(final BBBlackBoard bb) {
+		return Integer.parseInt(bb.get("linenumber")) <= fakeContacts.size();
 	}
 
 	public BTStatus doBefore(final BBBlackBoard bb) {

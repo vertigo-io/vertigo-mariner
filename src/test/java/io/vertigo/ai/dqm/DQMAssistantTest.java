@@ -1,9 +1,7 @@
 package io.vertigo.ai.dqm;
 
-import static io.vertigo.ai.bt.BTNodes.loop;
-import static io.vertigo.ai.bt.BTNodes.selector;
+import static io.vertigo.ai.bt.BTNodes.loopWhile;
 import static io.vertigo.ai.bt.BTNodes.sequence;
-import static io.vertigo.ai.bt.BTNodes.stop;
 
 import javax.inject.Inject;
 
@@ -39,12 +37,10 @@ public class DQMAssistantTest {
 
 			new BTRoot(
 					sequence(
-							dqmEngine.invoke(contactServices::init),
-							loop(
-									selector(
-											dqmEngine.invoke(contactServices::shouldContinue),
-											stop()),
-									dqmEngine.invoke(contactServices::doBefore),
+							dqmEngine.createNode(contactServices::init),
+							loopWhile(
+									dqmEngine.createCondition(contactServices::shouldContinue),
+									dqmEngine.createNode(contactServices::doBefore),
 									sequence(
 											printState(dqmEngine),
 											//---
@@ -54,7 +50,7 @@ public class DQMAssistantTest {
 											properField(dqmEngine, "salary"),
 											//---
 											printState(dqmEngine)),
-									dqmEngine.invoke(contactServices::doAfter),
+									dqmEngine.createNode(contactServices::doAfter),
 									dqmEngine.clear("target/*")))).run();
 		}
 
