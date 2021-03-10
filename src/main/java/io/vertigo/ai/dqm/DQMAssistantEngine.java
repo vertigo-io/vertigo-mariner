@@ -9,7 +9,9 @@ import java.util.function.Supplier;
 
 import io.vertigo.ai.bb.BBBlackBoard;
 import io.vertigo.ai.bot.BotEngine;
+import io.vertigo.ai.bt.BTCondition;
 import io.vertigo.ai.bt.BTNode;
+import io.vertigo.ai.bt.BTNodes;
 import io.vertigo.ai.bt.BTStatus;
 import io.vertigo.core.lang.BasicType;
 import io.vertigo.core.util.StringUtil;
@@ -69,7 +71,18 @@ public final class DQMAssistantEngine extends BotEngine {
 		return bb.get(key);
 	}
 
-	public BTNode invoke(final Function<BBBlackBoard, BTStatus> method) {
+	public BTCondition createCondition(final Function<BBBlackBoard, Boolean> method) {
+		return BTNodes.condition(() -> {
+			try {
+				return method.apply(bb);
+			} catch (final Exception e) {
+				return false;
+			}
+		});
+
+	}
+
+	public BTNode createNode(final Function<BBBlackBoard, BTStatus> method) {
 		return () -> {
 			try {
 				return method.apply(bb);
