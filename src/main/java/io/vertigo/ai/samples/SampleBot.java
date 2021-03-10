@@ -39,12 +39,20 @@ public class SampleBot {
 				botEngine.clear("rate/*"),
 				botEngine.fulfill("i/name", "Hi {{u/name}} please select [W]eather, [T]icket, [G]ame or e[X]it ?", "W", "G", "T", "X"),
 				botEngine.doSwitch("i/name")
+						.when("X", succeed())
+						.whenOther(dispatch())
+						.build());
+	}
+
+	private BTNode dispatch() {
+		return sequence(
+				botEngine.doSwitch("i/name")
 						.when("W", weather())
 						.when("G", game())
 						.when("T", ticket())
-						.when("X", succeed())
 						.build(),
 				rate());
+
 	}
 
 	private BTNode weather() {
