@@ -17,12 +17,12 @@ package io.vertigo.ai.bt;
  * 
  * Composites are composed from one to many other nodes 
  * They control the flow 
- *  - Sequence 
+ *  - Sequence
  *  - Selector
  *  - Switch (a special kind of selector)
  *  - Loop (a repeatable sequence)
- *  - Try 
- * 
+ *  - Try
+ *
  * Leaves are themselves split into
  *  - Conditions 
  *  - Tasks

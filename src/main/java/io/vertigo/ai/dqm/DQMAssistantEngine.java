@@ -29,7 +29,6 @@ public final class DQMAssistantEngine extends BotEngine {
 					}
 				},
 				set(key + "/type", basicType.name()));
-
 	}
 
 	public BTNode probeType(final String key) {
@@ -78,7 +77,6 @@ public final class DQMAssistantEngine extends BotEngine {
 				return BTStatus.Failed;
 			}
 		};
-
 	}
 
 }
