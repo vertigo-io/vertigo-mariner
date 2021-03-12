@@ -15,7 +15,7 @@ public class ContactServices implements Component {
 			new ContactData("Petit", "Philippe", "18/04/1979", "0", "false"));
 
 	public final BTStatus init(final BBBlackBoard bb) {
-		bb.inc("linenumber");
+		bb.incr("linenumber");
 		return BTStatus.Succeeded;
 	}
 
@@ -30,8 +30,8 @@ public class ContactServices implements Component {
 	}
 
 	public BTStatus doAfter(final BBBlackBoard bb) {
-		bb.clear("source/*");
-		bb.inc("linenumber");
+		bb.remove("source/*");
+		bb.incr("linenumber");
 		return BTStatus.Succeeded;
 	}
 

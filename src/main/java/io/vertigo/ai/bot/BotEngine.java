@@ -39,21 +39,21 @@ public class BotEngine {
 
 	public BTNode inc(final String keyTemplate) {
 		return () -> {
-			bb.inc(bb.format(keyTemplate));
+			bb.incr(bb.format(keyTemplate));
 			return BTStatus.Succeeded;
 		};
 	}
 
 	public BTNode clear(final String keyPattern) {
 		return () -> {
-			bb.clear(keyPattern);
+			bb.remove(keyPattern);
 			return BTStatus.Succeeded;
 		};
 	}
 
 	public BTNode clear() {
 		return () -> {
-			bb.clear();
+			bb.removeAll();
 			return BTStatus.Succeeded;
 		};
 	}

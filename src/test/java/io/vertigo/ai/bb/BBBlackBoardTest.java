@@ -9,7 +9,7 @@ public class BBBlackBoardTest {
 	public void testExists() {
 		final var bb = new BBBlackBoard();
 		Assertions.assertFalse(bb.exists("samplekey"));
-		bb.inc("samplekey");
+		bb.incr("samplekey");
 		Assertions.assertTrue(bb.exists("samplekey"));
 		//--only some characters are accepted ; blanks are not permitted
 		Assertions.assertThrows(Exception.class, () -> bb.exists("sample key"));
@@ -23,15 +23,15 @@ public class BBBlackBoardTest {
 		Assertions.assertEquals(0, bb.keys("*").size());
 		//---
 		bb = new BBBlackBoard();
-		bb.inc("test");
+		bb.incr("test");
 		Assertions.assertEquals(1, bb.keys("test").size());
 		Assertions.assertEquals(0, bb.keys("test/*").size());
 		Assertions.assertEquals(1, bb.keys("*").size());
 		//---
 		bb = new BBBlackBoard();
-		bb.inc("test");
-		bb.inc("test/1");
-		bb.inc("test/2");
+		bb.incr("test");
+		bb.incr("test/1");
+		bb.incr("test/2");
 		Assertions.assertEquals(1, bb.keys("test").size());
 		Assertions.assertEquals(2, bb.keys("test/*").size());
 		Assertions.assertEquals(3, bb.keys("*").size());
@@ -49,10 +49,10 @@ public class BBBlackBoardTest {
 				() -> bb2.keys("samplekey/*/test").isEmpty());
 		//--- keys and keys("*")
 		bb = new BBBlackBoard();
-		bb.inc("test");
-		bb.inc("test/1");
-		bb.inc("test/3");
-		bb.inc("test/4");
+		bb.incr("test");
+		bb.incr("test/1");
+		bb.incr("test/3");
+		bb.incr("test/4");
 		Assertions.assertEquals(4, bb.keys("*").size());
 		Assertions.assertEquals(4, bb.keys().size());
 	}
@@ -80,11 +80,11 @@ public class BBBlackBoardTest {
 	public void testInc() {
 		final var bb = new BBBlackBoard();
 		Assertions.assertEquals(null, bb.get("key"));
-		bb.inc("key");
+		bb.incr("key");
 		Assertions.assertEquals("1", bb.get("key"));
-		bb.inc("key");
+		bb.incr("key");
 		Assertions.assertEquals("2", bb.get("key"));
-		bb.inc("key", 10);
+		bb.incrBy("key", 10);
 		Assertions.assertEquals("12", bb.get("key"));
 	}
 
@@ -92,35 +92,95 @@ public class BBBlackBoardTest {
 	public void testDec() {
 		final var bb = new BBBlackBoard();
 		Assertions.assertEquals(null, bb.get("key"));
-		bb.inc("key", 10);
+		bb.incrBy("key", 10);
 		Assertions.assertEquals("10", bb.get("key"));
-		bb.dec("key");
+		bb.decr("key");
 		Assertions.assertEquals("9", bb.get("key"));
-		bb.dec("key");
+		bb.decr("key");
 		Assertions.assertEquals("8", bb.get("key"));
-		bb.dec("key", 5);
+		bb.incrBy("key", -5);
 		Assertions.assertEquals("3", bb.get("key"));
 	}
 
 	@Test
-	public void testClear() {
+	public void testRemove() {
 		final var bb = new BBBlackBoard();
 		Assertions.assertEquals(0, bb.keys().size());
-		bb.inc("sample/1");
-		bb.inc("sample/2");
-		bb.inc("sample/3");
-		bb.inc("sample/4");
+		bb.incr("sample/1");
+		bb.incr("sample/2");
+		bb.incr("sample/3");
+		bb.incr("sample/4");
 		Assertions.assertEquals(4, bb.keys().size());
-		bb.clear("sample/1");
+		bb.remove("sample/1");
 		Assertions.assertEquals(3, bb.keys().size());
-		bb.clear("*");
+		bb.remove("*");
 		Assertions.assertEquals(0, bb.keys().size());
-		bb.inc("sample/1");
-		bb.inc("sample/2");
-		bb.inc("sample/3");
-		bb.inc("sample/4");
-		bb.clear();
+		bb.incr("sample/1");
+		bb.incr("sample/2");
+		bb.incr("sample/3");
+		bb.incr("sample/4");
+		bb.removeAll();
 		Assertions.assertEquals(0, bb.keys().size());
+	}
+
+	@Test
+	public void testInteger() {
+		final var bb = new BBBlackBoard();
+		Assertions.assertEquals(null, bb.getInteger("sample"));
+		bb.incr("sample");
+		Assertions.assertEquals(1, bb.getInteger("sample"));
+		bb.incr("sample");
+		Assertions.assertEquals(2, bb.getInteger("sample"));
+		bb.putInteger("sample", 56);
+		Assertions.assertEquals(56, bb.getInteger("sample"));
+		Assertions.assertEquals(false, bb.lt("sample", "50"));
+		Assertions.assertEquals(true, bb.gt("sample", "50"));
+		Assertions.assertEquals(false, bb.eq("sample", "50"));
+		Assertions.assertEquals(true, bb.eq("sample", "56"));
+		bb.putInteger("sample", -55);
+		Assertions.assertEquals("-55", bb.get("sample"));
+		bb.incrBy("sample", 100);
+		Assertions.assertEquals(45, bb.getInteger("sample"));
+	}
+
+	@Test
+	public void testString() {
+		final var bb = new BBBlackBoard();
+		Assertions.assertEquals(null, bb.get("sample"));
+		bb.put("sample", "test");
+		Assertions.assertEquals("test", bb.get("sample"));
+		bb.removeAll();
+		bb.append("sample", "hello");
+		bb.append("sample", " ");
+		bb.append("sample", "world");
+		Assertions.assertEquals("hello world", bb.get("sample"));
+	}
+
+	@Test
+	public void testList() {
+		final var bb = new BBBlackBoard();
+		Assertions.assertEquals(0, bb.llen("sample"));
+		bb.lpush("sample", "a");
+		bb.lpush("sample", "b");
+		bb.lpush("sample", "c");
+		Assertions.assertEquals(3, bb.llen("sample"));
+		Assertions.assertEquals("c", bb.lpop("sample"));
+		Assertions.assertEquals(2, bb.llen("sample"));
+		Assertions.assertEquals("b", bb.lpeek("sample"));
+		Assertions.assertEquals(2, bb.llen("sample"));
+		bb.lpush("sample", "c");
+		Assertions.assertEquals(3, bb.llen("sample"));
+		Assertions.assertEquals("a", bb.lget("sample", 0));
+		Assertions.assertEquals("b", bb.lget("sample", 1));
+		Assertions.assertEquals("c", bb.lget("sample", 2));
+		Assertions.assertEquals("c", bb.lget("sample", -1));
+		Assertions.assertEquals("b", bb.lget("sample", -2));
+		Assertions.assertEquals("a", bb.lget("sample", -3));
+		bb.lpop("sample");
+		bb.lpop("sample");
+		bb.lpop("sample");
+		bb.lpop("sample");
+		Assertions.assertEquals(0, bb.llen("sample"));
 	}
 
 }
