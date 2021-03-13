@@ -159,28 +159,28 @@ public class BBBlackBoardTest {
 	@Test
 	public void testList() {
 		final var bb = new BBBlackBoard();
-		Assertions.assertEquals(0, bb.llen("sample"));
-		bb.lpush("sample", "a");
-		bb.lpush("sample", "b");
-		bb.lpush("sample", "c");
-		Assertions.assertEquals(3, bb.llen("sample"));
-		Assertions.assertEquals("c", bb.lpop("sample"));
-		Assertions.assertEquals(2, bb.llen("sample"));
-		Assertions.assertEquals("b", bb.lpeek("sample"));
-		Assertions.assertEquals(2, bb.llen("sample"));
-		bb.lpush("sample", "c");
-		Assertions.assertEquals(3, bb.llen("sample"));
-		Assertions.assertEquals("a", bb.lget("sample", 0));
-		Assertions.assertEquals("b", bb.lget("sample", 1));
-		Assertions.assertEquals("c", bb.lget("sample", 2));
-		Assertions.assertEquals("c", bb.lget("sample", -1));
-		Assertions.assertEquals("b", bb.lget("sample", -2));
-		Assertions.assertEquals("a", bb.lget("sample", -3));
-		bb.lpop("sample");
-		bb.lpop("sample");
-		bb.lpop("sample");
-		bb.lpop("sample");
-		Assertions.assertEquals(0, bb.llen("sample"));
+		Assertions.assertEquals(0, bb.len("sample"));
+		bb.push("sample", "a");
+		bb.push("sample", "b");
+		bb.push("sample", "c");
+		Assertions.assertEquals(3, bb.len("sample"));
+		Assertions.assertEquals("c", bb.pop("sample"));
+		Assertions.assertEquals(2, bb.len("sample"));
+		Assertions.assertEquals("b", bb.peek("sample"));
+		Assertions.assertEquals(2, bb.len("sample"));
+		bb.push("sample", "c");
+		Assertions.assertEquals(3, bb.len("sample"));
+		Assertions.assertEquals("a", bb.get("sample", 0));
+		Assertions.assertEquals("b", bb.get("sample", 1));
+		Assertions.assertEquals("c", bb.get("sample", 2));
+		Assertions.assertEquals("c", bb.get("sample", -1));
+		Assertions.assertEquals("b", bb.get("sample", -2));
+		Assertions.assertEquals("a", bb.get("sample", -3));
+		bb.pop("sample");
+		bb.pop("sample");
+		bb.pop("sample");
+		bb.pop("sample");
+		Assertions.assertEquals(0, bb.len("sample"));
 	}
 
 }

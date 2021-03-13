@@ -68,6 +68,9 @@ public final class BBBlackBoard {
 				: Integer.valueOf(s);
 	}
 
+	//------------------------------------
+	//--- Keys
+	//------------------------------------
 	/**
 	 * Returns if the keys exist
 	 * 
@@ -124,6 +127,10 @@ public final class BBBlackBoard {
 			keys.remove(key);
 		}
 	}
+
+	//------------------------------------
+	//--- KV
+	//------------------------------------
 
 	/**
 	 * Returns the value or null if the key does not exist
@@ -250,27 +257,27 @@ public final class BBBlackBoard {
 				: list;
 	}
 
-	public int llen(final String key) {
+	public int len(final String key) {
 		return getListOrEmpty(key)
 				.len();
 	}
 
-	public void lpush(final String key, final String value) {
+	public void push(final String key, final String value) {
 		getListOrCreate(key)
 				.push(value);
 	}
 
-	public String lpop(final String key) {
+	public String pop(final String key) {
 		return getListOrEmpty(key)
 				.pop();
 	}
 
-	public String lpeek(final String key) {
+	public String peek(final String key) {
 		return getListOrEmpty(key)
 				.peek();
 	}
 
-	public String lget(final String key, final int idx) {
+	public String get(final String key, final int idx) {
 		return getListOrEmpty(key)
 				.get(idx);
 	}
