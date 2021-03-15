@@ -115,6 +115,10 @@ public final class BTNodes {
 		return BTCondition.FAIL;
 	}
 
+	public static BTNode running() {
+		return () -> BTStatus.Running;
+	}
+
 	/**
 	 * Decorator 
 	 * This method is useful to build a node that returns a different status that its input.
