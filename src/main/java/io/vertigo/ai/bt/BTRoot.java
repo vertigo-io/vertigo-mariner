@@ -17,7 +17,7 @@ public final class BTRoot {
 		this.rootNode = rootNode;
 	}
 
-	public void run() {
-		rootNode.eval();
+	public BTStatus run() {
+		return rootNode.eval();
 	}
 }
